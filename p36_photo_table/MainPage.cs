@@ -43,6 +43,8 @@ namespace p36_photo_table
 
         private bool isShowingPopup;
 
+        private bool isSDKLoaded = false;
+
         public MainPage()
         {
             InitializeComponent();
@@ -64,6 +66,7 @@ namespace p36_photo_table
             isFilePrefixValid = false;
             isFormValid = false;
             isShowingPopup = false;
+            isSDKLoaded = CameraControl.CameraController.InitializeSDK();
         }
 
         private void MainPage_Load(object sender, EventArgs e)
@@ -316,9 +319,20 @@ namespace p36_photo_table
 
         private void startButton_Click(object sender, EventArgs e)
         {
-            Form popup = new InProgressPage();
-            isShowingPopup = true;
-            popup.ShowDialog(this);
+            InProgressPage popup = new InProgressPage();
+
+            if (isSDKLoaded)
+            {
+                isShowingPopup = true;
+                if (!popup.IsDisposed)
+                {
+                    popup.ShowDialog(this);
+                }
+            }
+            else
+            {
+                MessageBox.Show("SDK not loaded.");
+            }
         }
     }
 }

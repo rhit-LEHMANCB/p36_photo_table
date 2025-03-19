@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(InProgressPage));
             this.inProgressLabel = new System.Windows.Forms.Label();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.stopButton = new System.Windows.Forms.Button();
@@ -57,7 +58,6 @@
             // stopButton
             // 
             this.stopButton.BackColor = System.Drawing.Color.Red;
-            this.stopButton.Enabled = false;
             this.stopButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
             this.stopButton.Location = new System.Drawing.Point(615, 360);
             this.stopButton.Name = "stopButton";
@@ -107,6 +107,7 @@
             this.Controls.Add(this.stopButton);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.inProgressLabel);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "InProgressPage";
             this.ResumeLayout(false);
             this.PerformLayout();
