@@ -454,7 +454,7 @@
             // 
             // verticalIncrementImage
             // 
-            this.verticalIncrementImage.Image = global::p36_photo_table.Properties.Resources.Horizontal_Increment;
+            this.verticalIncrementImage.Image = global::p36_photo_table.Properties.Resources.Vertical_Increment;
             this.verticalIncrementImage.Location = new System.Drawing.Point(807, 105);
             this.verticalIncrementImage.Name = "verticalIncrementImage";
             this.verticalIncrementImage.Size = new System.Drawing.Size(73, 75);

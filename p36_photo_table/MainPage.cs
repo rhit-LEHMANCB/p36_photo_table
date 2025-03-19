@@ -41,6 +41,8 @@ namespace p36_photo_table
 
         private bool isFormValid;
 
+        private bool isShowingPopup;
+
         public MainPage()
         {
             InitializeComponent();
@@ -61,6 +63,7 @@ namespace p36_photo_table
             isFileLocationValid = true;
             isFilePrefixValid = false;
             isFormValid = false;
+            isShowingPopup = false;
         }
 
         private void MainPage_Load(object sender, EventArgs e)
@@ -313,7 +316,9 @@ namespace p36_photo_table
 
         private void startButton_Click(object sender, EventArgs e)
         {
-            
+            Form popup = new InProgressPage();
+            isShowingPopup = true;
+            popup.ShowDialog(this);
         }
     }
 }
