@@ -51,6 +51,7 @@
     <Compile Include="CameraController.cs" />
     <Compile Include="CameraEvent.cs" />
     <Compile Include="CameraModel.cs" />
+    <Compile Include="CapturedItem.cs" />
     <Compile Include="EDSDK.cs" />
     <Compile Include="InProgressPage.cs">
       <SubType>Form</SubType>

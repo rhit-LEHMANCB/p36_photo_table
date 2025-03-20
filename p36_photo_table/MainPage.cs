@@ -319,7 +319,7 @@ namespace p36_photo_table
 
         private void startButton_Click(object sender, EventArgs e)
         {
-            InProgressPage popup = new InProgressPage();
+            InProgressPage popup = new InProgressPage(horizontalIncrementValue, verticalIncrementValue, partHeight, partLength, partWidth, fileLocation, filePrefix);
 
             if (isSDKLoaded)
             {

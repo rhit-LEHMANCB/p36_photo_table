@@ -14,10 +14,16 @@ namespace p36_photo_table
     public partial class InProgressPage: Form
     {
         private CameraController controller;
-        public InProgressPage()
+
+        public InProgressPage(int horizontalIncrementValue)
+        {
+            
+        }
+
+        public InProgressPage(int horizontalIncrementValue, int verticalIncrementValue, float partHeight, float partLength, float partWidth, string fileLocation, string filePrefix) : this(horizontalIncrementValue)
         {
             InitializeComponent();
-            this.controller = new CameraController();
+            this.controller = new CameraController(horizontalIncrementValue, verticalIncrementValue, partHeight, partLength, partWidth, fileLocation, filePrefix);
             bool foundCamera = controller.InitializeCamera();
 
             if (!foundCamera)
@@ -25,6 +31,18 @@ namespace p36_photo_table
                 MessageBox.Show("No camera found.");
                 this.Close();
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            this.controller.TakePicture();
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            this.controller.CloseSession();
+
+            base.OnFormClosing(e);
         }
     }
 }
