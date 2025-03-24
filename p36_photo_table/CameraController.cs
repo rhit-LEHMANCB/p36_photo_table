@@ -18,6 +18,7 @@ namespace CameraControl
         private float partWidth;
         private string fileLocation;
         private string filePrefix;
+        private EDSDK.EdsObjectEventHandler objectEventHandler;
 
         public CameraController(int horizontalIncrementValue, int verticalIncrementValue, float partHeight, float partLength, float partWidth, string fileLocation, string filePrefix)
         {
@@ -28,6 +29,7 @@ namespace CameraControl
             this.partWidth = partWidth;
             this.fileLocation = fileLocation;
             this.filePrefix = filePrefix;
+            this.objectEventHandler = new EDSDK.EdsObjectEventHandler(HandleObjectEvent);
         }
 
         public bool InitializeCamera()
@@ -91,7 +93,7 @@ namespace CameraControl
 
             if (err == EDSDK.EDS_ERR_OK)
             {
-                err = EDSDK.EdsSetObjectEventHandler(camera, EDSDK.ObjectEvent_All, HandleObjectEvent, IntPtr.Zero);
+                err = EDSDK.EdsSetObjectEventHandler(camera, EDSDK.ObjectEvent_All, objectEventHandler, IntPtr.Zero);
             }
 
             if (err == EDSDK.EDS_ERR_OK)
@@ -131,12 +133,10 @@ namespace CameraControl
             return false;
         }
 
-        static uint HandleObjectEvent(uint inEvent, IntPtr inRef, IntPtr inContext)
+        uint HandleObjectEvent(uint inEvent, IntPtr inRef, IntPtr inContext)
         {
-            Console.WriteLine($"Object event detected: {inEvent:X}");
             if (inEvent == EDSDK.ObjectEvent_DirItemRequestTransfer)
             {
-                Console.WriteLine("New file detected!");
 
                 CapturedItem item = GetCapturedItem(inRef);
 
@@ -149,12 +149,11 @@ namespace CameraControl
             return EDSDK.EDS_ERR_OK;
         }
 
-        private static void SaveImage(CapturedItem item)
+        private void SaveImage(CapturedItem item)
         {
-            Console.WriteLine("Saving image: " + item.Name);
             using (Image image = Image.FromStream(new MemoryStream(item.Image)))
             {
-                image.Save("output.png", ImageFormat.Png);
+                image.Save($"{fileLocation}/{filePrefix}_15.png", ImageFormat.Png);
             }
         }
 
