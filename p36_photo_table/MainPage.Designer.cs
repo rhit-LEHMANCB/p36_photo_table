@@ -40,6 +40,10 @@
             this.verticalIncrementValueBox = new System.Windows.Forms.TextBox();
             this.horizontalValidationLabel = new System.Windows.Forms.Label();
             this.tooltip = new System.Windows.Forms.ToolTip(this.components);
+            this.filePrefixInfo = new System.Windows.Forms.PictureBox();
+            this.fileLocationInfo = new System.Windows.Forms.PictureBox();
+            this.verticalIncrementInfo = new System.Windows.Forms.PictureBox();
+            this.horizontalIncrementInfo = new System.Windows.Forms.PictureBox();
             this.verticalValidationLabel = new System.Windows.Forms.Label();
             this.parthWidthLabel = new System.Windows.Forms.Label();
             this.partLengthLabel = new System.Windows.Forms.Label();
@@ -63,18 +67,16 @@
             this.filePrefixValidationLabel = new System.Windows.Forms.Label();
             this.verticalIncrementImage = new System.Windows.Forms.PictureBox();
             this.horizontalIncrementImage = new System.Windows.Forms.PictureBox();
-            this.filePrefixInfo = new System.Windows.Forms.PictureBox();
-            this.fileLocationInfo = new System.Windows.Forms.PictureBox();
-            this.verticalIncrementInfo = new System.Windows.Forms.PictureBox();
-            this.horizontalIncrementInfo = new System.Windows.Forms.PictureBox();
+            this.button2 = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.horizontalIncrement)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.verticalIncrement)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.verticalIncrementImage)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.horizontalIncrementImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.filePrefixInfo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fileLocationInfo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.verticalIncrementInfo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.horizontalIncrementInfo)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.verticalIncrementImage)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.horizontalIncrementImage)).BeginInit();
             this.SuspendLayout();
             // 
             // horizontalIncrement
@@ -86,7 +88,7 @@
             this.horizontalIncrement.Maximum = 9;
             this.horizontalIncrement.Minimum = 1;
             this.horizontalIncrement.Name = "horizontalIncrement";
-            this.horizontalIncrement.Size = new System.Drawing.Size(270, 45);
+            this.horizontalIncrement.Size = new System.Drawing.Size(270, 69);
             this.horizontalIncrement.TabIndex = 2;
             this.horizontalIncrement.Value = 1;
             this.horizontalIncrement.Scroll += new System.EventHandler(this.horizontalIncrement_Scroll);
@@ -100,7 +102,7 @@
             this.verticalIncrement.Maximum = 9;
             this.verticalIncrement.Minimum = 1;
             this.verticalIncrement.Name = "verticalIncrement";
-            this.verticalIncrement.Size = new System.Drawing.Size(270, 45);
+            this.verticalIncrement.Size = new System.Drawing.Size(270, 69);
             this.verticalIncrement.TabIndex = 3;
             this.verticalIncrement.Value = 1;
             this.verticalIncrement.Scroll += new System.EventHandler(this.verticalIncrement_Scroll);
@@ -112,7 +114,7 @@
             this.horizontalIncrementLabel.Location = new System.Drawing.Point(96, 107);
             this.horizontalIncrementLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.horizontalIncrementLabel.Name = "horizontalIncrementLabel";
-            this.horizontalIncrementLabel.Size = new System.Drawing.Size(183, 24);
+            this.horizontalIncrementLabel.Size = new System.Drawing.Size(275, 32);
             this.horizontalIncrementLabel.TabIndex = 30;
             this.horizontalIncrementLabel.Text = "Horizontal Increment";
             // 
@@ -123,7 +125,7 @@
             this.verticalIncrementLabel.Location = new System.Drawing.Point(557, 107);
             this.verticalIncrementLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.verticalIncrementLabel.Name = "verticalIncrementLabel";
-            this.verticalIncrementLabel.Size = new System.Drawing.Size(161, 24);
+            this.verticalIncrementLabel.Size = new System.Drawing.Size(242, 32);
             this.verticalIncrementLabel.TabIndex = 31;
             this.verticalIncrementLabel.Text = "Vertical Increment";
             // 
@@ -134,7 +136,7 @@
             this.horizontalCurrentValueLabel.Location = new System.Drawing.Point(69, 198);
             this.horizontalCurrentValueLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.horizontalCurrentValueLabel.Name = "horizontalCurrentValueLabel";
-            this.horizontalCurrentValueLabel.Size = new System.Drawing.Size(99, 17);
+            this.horizontalCurrentValueLabel.Size = new System.Drawing.Size(139, 25);
             this.horizontalCurrentValueLabel.TabIndex = 33;
             this.horizontalCurrentValueLabel.Text = "Current Value:";
             // 
@@ -145,7 +147,7 @@
             this.verticalCurrentValueLabel.Location = new System.Drawing.Point(529, 198);
             this.verticalCurrentValueLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.verticalCurrentValueLabel.Name = "verticalCurrentValueLabel";
-            this.verticalCurrentValueLabel.Size = new System.Drawing.Size(99, 17);
+            this.verticalCurrentValueLabel.Size = new System.Drawing.Size(139, 25);
             this.verticalCurrentValueLabel.TabIndex = 34;
             this.verticalCurrentValueLabel.Text = "Current Value:";
             // 
@@ -155,7 +157,7 @@
             this.horizontalIncrementValueBox.Location = new System.Drawing.Point(165, 196);
             this.horizontalIncrementValueBox.Margin = new System.Windows.Forms.Padding(2);
             this.horizontalIncrementValueBox.Name = "horizontalIncrementValueBox";
-            this.horizontalIncrementValueBox.Size = new System.Drawing.Size(68, 23);
+            this.horizontalIncrementValueBox.Size = new System.Drawing.Size(68, 30);
             this.horizontalIncrementValueBox.TabIndex = 4;
             this.horizontalIncrementValueBox.Text = "5";
             this.horizontalIncrementValueBox.TextChanged += new System.EventHandler(this.horizontalIncrementValueBox_TextChanged);
@@ -166,7 +168,7 @@
             this.verticalIncrementValueBox.Location = new System.Drawing.Point(625, 196);
             this.verticalIncrementValueBox.Margin = new System.Windows.Forms.Padding(2);
             this.verticalIncrementValueBox.Name = "verticalIncrementValueBox";
-            this.verticalIncrementValueBox.Size = new System.Drawing.Size(68, 23);
+            this.verticalIncrementValueBox.Size = new System.Drawing.Size(68, 30);
             this.verticalIncrementValueBox.TabIndex = 5;
             this.verticalIncrementValueBox.Text = "5";
             this.verticalIncrementValueBox.TextChanged += new System.EventHandler(this.verticalIncrementValueBox_TextChanged);
@@ -180,6 +182,54 @@
             this.horizontalValidationLabel.Name = "horizontalValidationLabel";
             this.horizontalValidationLabel.Size = new System.Drawing.Size(0, 13);
             this.horizontalValidationLabel.TabIndex = 9;
+            // 
+            // filePrefixInfo
+            // 
+            this.filePrefixInfo.Image = global::p36_photo_table.Properties.Resources.info;
+            this.filePrefixInfo.Location = new System.Drawing.Point(71, 341);
+            this.filePrefixInfo.Margin = new System.Windows.Forms.Padding(2);
+            this.filePrefixInfo.Name = "filePrefixInfo";
+            this.filePrefixInfo.Size = new System.Drawing.Size(21, 27);
+            this.filePrefixInfo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.filePrefixInfo.TabIndex = 33;
+            this.filePrefixInfo.TabStop = false;
+            this.tooltip.SetToolTip(this.filePrefixInfo, "This prefix will be appended to the beginning \r\nof the name of all images saved.");
+            // 
+            // fileLocationInfo
+            // 
+            this.fileLocationInfo.Image = global::p36_photo_table.Properties.Resources.info;
+            this.fileLocationInfo.Location = new System.Drawing.Point(71, 432);
+            this.fileLocationInfo.Margin = new System.Windows.Forms.Padding(2);
+            this.fileLocationInfo.Name = "fileLocationInfo";
+            this.fileLocationInfo.Size = new System.Drawing.Size(21, 27);
+            this.fileLocationInfo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.fileLocationInfo.TabIndex = 30;
+            this.fileLocationInfo.TabStop = false;
+            this.tooltip.SetToolTip(this.fileLocationInfo, "This is the location of where the images\r\nwill be saved after completion.");
+            // 
+            // verticalIncrementInfo
+            // 
+            this.verticalIncrementInfo.Image = global::p36_photo_table.Properties.Resources.info;
+            this.verticalIncrementInfo.Location = new System.Drawing.Point(532, 105);
+            this.verticalIncrementInfo.Margin = new System.Windows.Forms.Padding(2);
+            this.verticalIncrementInfo.Name = "verticalIncrementInfo";
+            this.verticalIncrementInfo.Size = new System.Drawing.Size(21, 27);
+            this.verticalIncrementInfo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.verticalIncrementInfo.TabIndex = 11;
+            this.verticalIncrementInfo.TabStop = false;
+            this.tooltip.SetToolTip(this.verticalIncrementInfo, "The increment of the angular displacement \r\nrelative to the horizontal plane.");
+            // 
+            // horizontalIncrementInfo
+            // 
+            this.horizontalIncrementInfo.Image = global::p36_photo_table.Properties.Resources.info;
+            this.horizontalIncrementInfo.Location = new System.Drawing.Point(71, 105);
+            this.horizontalIncrementInfo.Margin = new System.Windows.Forms.Padding(2);
+            this.horizontalIncrementInfo.Name = "horizontalIncrementInfo";
+            this.horizontalIncrementInfo.Size = new System.Drawing.Size(21, 27);
+            this.horizontalIncrementInfo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.horizontalIncrementInfo.TabIndex = 10;
+            this.horizontalIncrementInfo.TabStop = false;
+            this.tooltip.SetToolTip(this.horizontalIncrementInfo, "The increment at which the turntable\r\nwill rotate for each image.");
             // 
             // verticalValidationLabel
             // 
@@ -198,7 +248,7 @@
             this.parthWidthLabel.Location = new System.Drawing.Point(141, 245);
             this.parthWidthLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.parthWidthLabel.Name = "parthWidthLabel";
-            this.parthWidthLabel.Size = new System.Drawing.Size(138, 24);
+            this.parthWidthLabel.Size = new System.Drawing.Size(208, 32);
             this.parthWidthLabel.TabIndex = 35;
             this.parthWidthLabel.Text = "Part Width (cm)";
             // 
@@ -209,7 +259,7 @@
             this.partLengthLabel.Location = new System.Drawing.Point(369, 245);
             this.partLengthLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.partLengthLabel.Name = "partLengthLabel";
-            this.partLengthLabel.Size = new System.Drawing.Size(148, 24);
+            this.partLengthLabel.Size = new System.Drawing.Size(223, 32);
             this.partLengthLabel.TabIndex = 36;
             this.partLengthLabel.Text = "Part Length (cm)";
             // 
@@ -220,7 +270,7 @@
             this.partHeightLabel.Location = new System.Drawing.Point(605, 245);
             this.partHeightLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.partHeightLabel.Name = "partHeightLabel";
-            this.partHeightLabel.Size = new System.Drawing.Size(145, 24);
+            this.partHeightLabel.Size = new System.Drawing.Size(218, 32);
             this.partHeightLabel.TabIndex = 37;
             this.partHeightLabel.Text = "Part Height (cm)";
             // 
@@ -230,7 +280,7 @@
             this.partWidthInput.Location = new System.Drawing.Point(160, 274);
             this.partWidthInput.Margin = new System.Windows.Forms.Padding(2);
             this.partWidthInput.Name = "partWidthInput";
-            this.partWidthInput.Size = new System.Drawing.Size(100, 23);
+            this.partWidthInput.Size = new System.Drawing.Size(100, 30);
             this.partWidthInput.TabIndex = 6;
             this.partWidthInput.TextChanged += new System.EventHandler(this.partWidthInput_TextChanged);
             // 
@@ -240,7 +290,7 @@
             this.partLengthInput.Location = new System.Drawing.Point(393, 274);
             this.partLengthInput.Margin = new System.Windows.Forms.Padding(2);
             this.partLengthInput.Name = "partLengthInput";
-            this.partLengthInput.Size = new System.Drawing.Size(100, 23);
+            this.partLengthInput.Size = new System.Drawing.Size(100, 30);
             this.partLengthInput.TabIndex = 7;
             this.partLengthInput.TextChanged += new System.EventHandler(this.partLengthInput_TextChanged);
             // 
@@ -250,7 +300,7 @@
             this.partHeightInput.Location = new System.Drawing.Point(625, 274);
             this.partHeightInput.Margin = new System.Windows.Forms.Padding(2);
             this.partHeightInput.Name = "partHeightInput";
-            this.partHeightInput.Size = new System.Drawing.Size(100, 23);
+            this.partHeightInput.Size = new System.Drawing.Size(100, 30);
             this.partHeightInput.TabIndex = 8;
             this.partHeightInput.TextChanged += new System.EventHandler(this.partHeightInput_TextChanged);
             // 
@@ -278,7 +328,7 @@
             this.presetsLabel.Location = new System.Drawing.Point(70, 31);
             this.presetsLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.presetsLabel.Name = "presetsLabel";
-            this.presetsLabel.Size = new System.Drawing.Size(77, 24);
+            this.presetsLabel.Size = new System.Drawing.Size(118, 32);
             this.presetsLabel.TabIndex = 21;
             this.presetsLabel.Text = "Presets:";
             // 
@@ -352,7 +402,7 @@
             this.fileLocationLabel.Location = new System.Drawing.Point(96, 434);
             this.fileLocationLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.fileLocationLabel.Name = "fileLocationLabel";
-            this.fileLocationLabel.Size = new System.Drawing.Size(117, 24);
+            this.fileLocationLabel.Size = new System.Drawing.Size(177, 32);
             this.fileLocationLabel.TabIndex = 39;
             this.fileLocationLabel.Text = "File Location";
             // 
@@ -362,7 +412,7 @@
             this.fileLocationInput.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.fileLocationInput.Location = new System.Drawing.Point(71, 487);
             this.fileLocationInput.Name = "fileLocationInput";
-            this.fileLocationInput.Size = new System.Drawing.Size(0, 17);
+            this.fileLocationInput.Size = new System.Drawing.Size(0, 25);
             this.fileLocationInput.TabIndex = 31;
             // 
             // filePrefixLabel
@@ -372,7 +422,7 @@
             this.filePrefixLabel.Location = new System.Drawing.Point(96, 343);
             this.filePrefixLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.filePrefixLabel.Name = "filePrefixLabel";
-            this.filePrefixLabel.Size = new System.Drawing.Size(93, 24);
+            this.filePrefixLabel.Size = new System.Drawing.Size(141, 32);
             this.filePrefixLabel.TabIndex = 38;
             this.filePrefixLabel.Text = "File Prefix";
             // 
@@ -382,7 +432,7 @@
             this.filePrefixInput.Location = new System.Drawing.Point(71, 372);
             this.filePrefixInput.Margin = new System.Windows.Forms.Padding(2);
             this.filePrefixInput.Name = "filePrefixInput";
-            this.filePrefixInput.Size = new System.Drawing.Size(189, 23);
+            this.filePrefixInput.Size = new System.Drawing.Size(189, 30);
             this.filePrefixInput.TabIndex = 9;
             this.filePrefixInput.TextChanged += new System.EventHandler(this.filePrefixInput_TextChanged);
             // 
@@ -416,53 +466,25 @@
             this.horizontalIncrementImage.TabIndex = 36;
             this.horizontalIncrementImage.TabStop = false;
             // 
-            // filePrefixInfo
+            // button2
             // 
-            this.filePrefixInfo.Image = global::p36_photo_table.Properties.Resources.info;
-            this.filePrefixInfo.Location = new System.Drawing.Point(71, 341);
-            this.filePrefixInfo.Margin = new System.Windows.Forms.Padding(2);
-            this.filePrefixInfo.Name = "filePrefixInfo";
-            this.filePrefixInfo.Size = new System.Drawing.Size(21, 27);
-            this.filePrefixInfo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.filePrefixInfo.TabIndex = 33;
-            this.filePrefixInfo.TabStop = false;
-            this.tooltip.SetToolTip(this.filePrefixInfo, "This prefix will be appended to the beginning \r\nof the name of all images saved.");
+            this.button2.Location = new System.Drawing.Point(707, 40);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 41;
+            this.button2.Text = "light off";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
-            // fileLocationInfo
+            // button1
             // 
-            this.fileLocationInfo.Image = global::p36_photo_table.Properties.Resources.info;
-            this.fileLocationInfo.Location = new System.Drawing.Point(71, 432);
-            this.fileLocationInfo.Margin = new System.Windows.Forms.Padding(2);
-            this.fileLocationInfo.Name = "fileLocationInfo";
-            this.fileLocationInfo.Size = new System.Drawing.Size(21, 27);
-            this.fileLocationInfo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.fileLocationInfo.TabIndex = 30;
-            this.fileLocationInfo.TabStop = false;
-            this.tooltip.SetToolTip(this.fileLocationInfo, "This is the location of where the images\r\nwill be saved after completion.");
-            // 
-            // verticalIncrementInfo
-            // 
-            this.verticalIncrementInfo.Image = global::p36_photo_table.Properties.Resources.info;
-            this.verticalIncrementInfo.Location = new System.Drawing.Point(532, 105);
-            this.verticalIncrementInfo.Margin = new System.Windows.Forms.Padding(2);
-            this.verticalIncrementInfo.Name = "verticalIncrementInfo";
-            this.verticalIncrementInfo.Size = new System.Drawing.Size(21, 27);
-            this.verticalIncrementInfo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.verticalIncrementInfo.TabIndex = 11;
-            this.verticalIncrementInfo.TabStop = false;
-            this.tooltip.SetToolTip(this.verticalIncrementInfo, "The increment of the angular displacement \r\nrelative to the horizontal plane.");
-            // 
-            // horizontalIncrementInfo
-            // 
-            this.horizontalIncrementInfo.Image = global::p36_photo_table.Properties.Resources.info;
-            this.horizontalIncrementInfo.Location = new System.Drawing.Point(71, 105);
-            this.horizontalIncrementInfo.Margin = new System.Windows.Forms.Padding(2);
-            this.horizontalIncrementInfo.Name = "horizontalIncrementInfo";
-            this.horizontalIncrementInfo.Size = new System.Drawing.Size(21, 27);
-            this.horizontalIncrementInfo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.horizontalIncrementInfo.TabIndex = 10;
-            this.horizontalIncrementInfo.TabStop = false;
-            this.tooltip.SetToolTip(this.horizontalIncrementInfo, "The increment at which the turntable\r\nwill rotate for each image.");
+            this.button1.Location = new System.Drawing.Point(625, 40);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 42;
+            this.button1.Text = "light on";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // MainPage
             // 
@@ -471,6 +493,8 @@
             this.BackColor = System.Drawing.SystemColors.Window;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.ClientSize = new System.Drawing.Size(950, 566);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.button2);
             this.Controls.Add(this.verticalIncrementImage);
             this.Controls.Add(this.horizontalIncrementImage);
             this.Controls.Add(this.filePrefixValidationLabel);
@@ -514,12 +538,12 @@
             this.Load += new System.EventHandler(this.MainPage_Load);
             ((System.ComponentModel.ISupportInitialize)(this.horizontalIncrement)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.verticalIncrement)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.verticalIncrementImage)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.horizontalIncrementImage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.filePrefixInfo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.fileLocationInfo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.verticalIncrementInfo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.horizontalIncrementInfo)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.verticalIncrementImage)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.horizontalIncrementImage)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -563,6 +587,8 @@
         private System.Windows.Forms.Label filePrefixValidationLabel;
         private System.Windows.Forms.PictureBox horizontalIncrementImage;
         private System.Windows.Forms.PictureBox verticalIncrementImage;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button button1;
     }
 }
 

@@ -39,11 +39,9 @@ namespace p36_photo_table
         private bool isFileLocationValid;
         private bool isFilePrefixValid;
 
-        private bool isFormValid;
-
-        private bool isShowingPopup;
-
         private bool isSDKLoaded = false;
+
+        private ArduinoController arduinoController;
 
         public MainPage()
         {
@@ -64,9 +62,16 @@ namespace p36_photo_table
             isPartWidthValid = false;
             isFileLocationValid = true;
             isFilePrefixValid = false;
-            isFormValid = false;
-            isShowingPopup = false;
             isSDKLoaded = CameraControl.CameraController.InitializeSDK();
+
+            //try
+            //{
+                arduinoController = new ArduinoController();
+            //}
+            //catch (Exception e)
+            //{
+            //    MessageBox.Show("Arduino not connected.");
+            //}
         }
 
         private void MainPage_Load(object sender, EventArgs e)
@@ -276,13 +281,11 @@ namespace p36_photo_table
                 isFileLocationValid &&
                 isFilePrefixValid)
             {
-                isFormValid = true;
                 startButton.BackColor = Color.LimeGreen;
                 startButton.Enabled = true;
             }
             else
             {
-                isFormValid = false;
                 startButton.BackColor = Color.Gray;
                 startButton.Enabled = false;
             }
@@ -319,11 +322,10 @@ namespace p36_photo_table
 
         private void startButton_Click(object sender, EventArgs e)
         {
-            InProgressPage popup = new InProgressPage(horizontalIncrementValue, verticalIncrementValue, partHeight, partLength, partWidth, fileLocation, filePrefix);
+            InProgressPage popup = new InProgressPage(horizontalIncrementValue, verticalIncrementValue, partHeight, partLength, partWidth, fileLocation, filePrefix, arduinoController);
 
             if (isSDKLoaded)
             {
-                isShowingPopup = true;
                 if (!popup.IsDisposed)
                 {
                     popup.ShowDialog(this);
@@ -333,6 +335,20 @@ namespace p36_photo_table
             {
                 MessageBox.Show("SDK not loaded.");
             }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            arduinoController.SendCommand("0");
+            string response = arduinoController.WaitForResponse();
+            Console.WriteLine("Command completed: " + response);
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            arduinoController.SendCommand("1");
+            string response = arduinoController.WaitForResponse();
+            Console.WriteLine("Command completed: " + response);
         }
     }
 }
