@@ -337,18 +337,18 @@ namespace p36_photo_table
             }
         }
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-            arduinoController.SendCommand("0");
-            string response = arduinoController.WaitForResponse();
-            Console.WriteLine("Command completed: " + response);
-        }
-
         private void button1_Click(object sender, EventArgs e)
         {
-            arduinoController.SendCommand("1");
+            arduinoController.SendCommand("15,30,45,60");
             string response = arduinoController.WaitForResponse();
-            Console.WriteLine("Command completed: " + response);
+            Console.WriteLine(response);
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            arduinoController.SendCommand("home");
+            string response = arduinoController.WaitForResponse();
+            Console.WriteLine(response);
         }
     }
 }
