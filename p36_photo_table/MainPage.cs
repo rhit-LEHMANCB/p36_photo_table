@@ -339,7 +339,8 @@ namespace p36_photo_table
 
         private void button1_Click(object sender, EventArgs e)
         {
-            arduinoController.SendCommand("15,30,45,60");
+
+            arduinoController.SendCommand($"200,200,1000,200");
             string response = arduinoController.WaitForResponse();
             Console.WriteLine(response);
         }

@@ -6,7 +6,7 @@ const int delayIndex = 3;
 const int tableDirPin = 2; 
 const int tableStepPin = 3; 
 const int tableEnPin = 4;
-const int tableStepperDelay = 2000;
+const int tableStepperDelay = 1000;
 int tableStepper[] = {tableStepPin, tableDirPin, tableEnPin, tableStepperDelay}; 
 
 const int horizDirPin = 5; 
@@ -29,9 +29,9 @@ void setup() {
   pinMode(tableDirPin, OUTPUT);
   pinMode(tableEnPin, OUTPUT);
 
-  pinMode(horizStepPin, OUTPUT);
-  pinMode(horizDirPin, OUTPUT);
-  pinMode(horizEnPin, OUTPUT);
+  // pinMode(horizStepPin, OUTPUT);
+  // pinMode(horizDirPin, OUTPUT);
+  // pinMode(horizEnPin, OUTPUT);
 
   Serial.begin(9600);
 }
@@ -53,12 +53,15 @@ void handleHomeCommand() {
 
 void handleMotorCommand(String input) {
   String verticalMotorString = getValue(input, ',', 0);
-  String armMotorString = getValue(input, ',', 1);
+  String horizMotorString = getValue(input, ',', 1);
   String tableMotorString = getValue(input, ',', 2);
   String cameraMotorString = getValue(input, ',', 3);
-  moveMotor(tableStepper, 1000);
-  moveMotor(horizStepper, 200);
-  Serial.println("Vertical: " + verticalMotorString + " Arm: " + armMotorString + " Table: " + tableMotorString + " Camera: " + cameraMotorString);
+  // moveMotor(verticalStepper, 1000);
+  // moveMotor(horizStepper, 200);
+  moveMotor(tableStepper, tableMotorString.toInt()); // 1000 full rotation
+  // moveMotor(cameraStepper, 1000);
+  
+  Serial.println("Vertical: " + verticalMotorString + " Arm: " + horizMotorString + " Table: " + tableMotorString + " Camera: " + cameraMotorString);
 }
 
 void moveMotor(int stepper[], int steps) {
