@@ -16,6 +16,7 @@ namespace p36_photo_table
         {
             string portName = AutodetectArduinoPort();
             Console.WriteLine("Arduino found on port: " + portName);
+            // TODO: catch the exception if the port isnt found
             serialPort = new SerialPort(portName, 9600);
             serialPort.Open();
         }
@@ -54,6 +55,12 @@ namespace p36_photo_table
             return null;
         }
 
+        public void Home()
+        {
+            SendCommand("home");
+            Console.WriteLine(WaitForResponse());
+        }
+
         public void SendCommand(string command)
         {
             serialPort.Write(command);
@@ -69,6 +76,12 @@ namespace p36_photo_table
                     return response;
                 }
             }
+        }
+
+        internal void MoveMotors(int verticalSteps, int horizontalSteps, int tableSteps, int cameraSteps)
+        {
+            SendCommand($"{verticalSteps},{horizontalSteps},{tableSteps},{cameraSteps}");
+            Console.WriteLine(WaitForResponse());
         }
     }
 }

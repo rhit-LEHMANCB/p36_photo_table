@@ -11,22 +11,12 @@ namespace CameraControl
     internal class CameraController
     {
         private CameraModel cameraModel;
-        private int horizontalIncrementValue;
-        private int verticalIncrementValue;
-        private float partHeight;
-        private float partLength;
-        private float partWidth;
         private string fileLocation;
         private string filePrefix;
         private EDSDK.EdsObjectEventHandler objectEventHandler;
 
-        public CameraController(int horizontalIncrementValue, int verticalIncrementValue, float partHeight, float partLength, float partWidth, string fileLocation, string filePrefix)
+        public CameraController(string fileLocation, string filePrefix)
         {
-            this.horizontalIncrementValue = horizontalIncrementValue;
-            this.verticalIncrementValue = verticalIncrementValue;
-            this.partHeight = partHeight;
-            this.partLength = partLength;
-            this.partWidth = partWidth;
             this.fileLocation = fileLocation;
             this.filePrefix = filePrefix;
             this.objectEventHandler = new EDSDK.EdsObjectEventHandler(HandleObjectEvent);

@@ -41,8 +41,6 @@ namespace p36_photo_table
 
         private bool isSDKLoaded = false;
 
-        private ArduinoController arduinoController;
-
         public MainPage()
         {
             InitializeComponent();
@@ -63,15 +61,6 @@ namespace p36_photo_table
             isFileLocationValid = true;
             isFilePrefixValid = false;
             isSDKLoaded = CameraControl.CameraController.InitializeSDK();
-
-            //try
-            //{
-                arduinoController = new ArduinoController();
-            //}
-            //catch (Exception e)
-            //{
-            //    MessageBox.Show("Arduino not connected.");
-            //}
         }
 
         private void MainPage_Load(object sender, EventArgs e)
@@ -322,7 +311,7 @@ namespace p36_photo_table
 
         private void startButton_Click(object sender, EventArgs e)
         {
-            InProgressPage popup = new InProgressPage(horizontalIncrementValue, verticalIncrementValue, partHeight, partLength, partWidth, fileLocation, filePrefix, arduinoController);
+            InProgressPage popup = new InProgressPage(horizontalIncrementValue, verticalIncrementValue, partHeight, partLength, partWidth, fileLocation, filePrefix);
 
             if (isSDKLoaded)
             {
@@ -335,21 +324,6 @@ namespace p36_photo_table
             {
                 MessageBox.Show("SDK not loaded.");
             }
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-
-            arduinoController.SendCommand($"200,200,1000,200");
-            string response = arduinoController.WaitForResponse();
-            Console.WriteLine(response);
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            arduinoController.SendCommand("home");
-            string response = arduinoController.WaitForResponse();
-            Console.WriteLine(response);
         }
     }
 }

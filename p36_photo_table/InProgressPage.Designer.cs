@@ -30,41 +30,40 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(InProgressPage));
             this.inProgressLabel = new System.Windows.Forms.Label();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.statusBar = new System.Windows.Forms.ProgressBar();
             this.stopButton = new System.Windows.Forms.Button();
             this.statusStaticLabel = new System.Windows.Forms.Label();
             this.statusLabel = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
+            this.statusNumberLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // inProgressLabel
             // 
             this.inProgressLabel.AutoSize = true;
             this.inProgressLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
-            this.inProgressLabel.Location = new System.Drawing.Point(329, 139);
+            this.inProgressLabel.Location = new System.Drawing.Point(494, 214);
+            this.inProgressLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.inProgressLabel.Name = "inProgressLabel";
             this.inProgressLabel.Size = new System.Drawing.Size(181, 32);
             this.inProgressLabel.TabIndex = 0;
             this.inProgressLabel.Text = "In Progress...";
             // 
-            // progressBar1
+            // statusBar
             // 
-            this.progressBar1.Location = new System.Drawing.Point(215, 179);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(356, 23);
-            this.progressBar1.TabIndex = 1;
-            this.progressBar1.Value = 15;
+            this.statusBar.Location = new System.Drawing.Point(322, 275);
+            this.statusBar.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.statusBar.Name = "statusBar";
+            this.statusBar.Size = new System.Drawing.Size(534, 35);
+            this.statusBar.TabIndex = 1;
             // 
             // stopButton
             // 
             this.stopButton.BackColor = System.Drawing.Color.Red;
             this.stopButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
-            this.stopButton.Location = new System.Drawing.Point(615, 360);
+            this.stopButton.Location = new System.Drawing.Point(922, 554);
+            this.stopButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.stopButton.Name = "stopButton";
-            this.stopButton.Size = new System.Drawing.Size(147, 62);
+            this.stopButton.Size = new System.Drawing.Size(220, 95);
             this.stopButton.TabIndex = 20;
             this.stopButton.Text = "Stop";
             this.stopButton.UseVisualStyleBackColor = false;
@@ -73,7 +72,8 @@
             // 
             this.statusStaticLabel.AutoSize = true;
             this.statusStaticLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.statusStaticLabel.Location = new System.Drawing.Point(212, 219);
+            this.statusStaticLabel.Location = new System.Drawing.Point(318, 337);
+            this.statusStaticLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.statusStaticLabel.Name = "statusStaticLabel";
             this.statusStaticLabel.Size = new System.Drawing.Size(74, 25);
             this.statusStaticLabel.TabIndex = 21;
@@ -83,68 +83,39 @@
             // 
             this.statusLabel.AutoSize = true;
             this.statusLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.statusLabel.Location = new System.Drawing.Point(212, 236);
+            this.statusLabel.Location = new System.Drawing.Point(318, 363);
+            this.statusLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.statusLabel.Name = "statusLabel";
             this.statusLabel.Size = new System.Drawing.Size(527, 25);
             this.statusLabel.TabIndex = 22;
             this.statusLabel.Text = "Taking picture with horizontal angle 15 and vertical angle 15";
             // 
-            // label1
+            // statusNumberLabel
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.label1.Location = new System.Drawing.Point(212, 263);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(116, 25);
-            this.label1.TabIndex = 23;
-            this.label1.Text = "Picture 1/36";
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(357, 72);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 24;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(508, 72);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 44;
-            this.button2.Text = "light on";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(590, 72);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
-            this.button3.TabIndex = 43;
-            this.button3.Text = "light off";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.statusNumberLabel.AutoSize = true;
+            this.statusNumberLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.statusNumberLabel.Location = new System.Drawing.Point(318, 405);
+            this.statusNumberLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.statusNumberLabel.Name = "statusNumberLabel";
+            this.statusNumberLabel.Size = new System.Drawing.Size(116, 25);
+            this.statusNumberLabel.TabIndex = 23;
+            this.statusNumberLabel.Text = "Picture 1/36";
             // 
             // InProgressPage
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.label1);
+            this.ClientSize = new System.Drawing.Size(1200, 692);
+            this.Controls.Add(this.statusNumberLabel);
             this.Controls.Add(this.statusLabel);
             this.Controls.Add(this.statusStaticLabel);
             this.Controls.Add(this.stopButton);
-            this.Controls.Add(this.progressBar1);
+            this.Controls.Add(this.statusBar);
             this.Controls.Add(this.inProgressLabel);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "InProgressPage";
+            this.Shown += new System.EventHandler(this.InProgressPage_Shown);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -153,13 +124,10 @@
         #endregion
 
         private System.Windows.Forms.Label inProgressLabel;
-        private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.ProgressBar statusBar;
         private System.Windows.Forms.Button stopButton;
         private System.Windows.Forms.Label statusStaticLabel;
         private System.Windows.Forms.Label statusLabel;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Label statusNumberLabel;
     }
 }
