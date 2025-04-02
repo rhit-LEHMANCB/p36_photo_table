@@ -86,5 +86,10 @@ namespace p36_photo_table
             SendCommand($"{verticalSteps},{horizontalSteps},{tableSteps},{cameraSteps}");
             Console.WriteLine(WaitForResponse());
         }
+
+        internal void CloseSession()
+        {
+            serialPort.Close();
+        }
     }
 }

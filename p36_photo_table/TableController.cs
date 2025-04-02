@@ -1,6 +1,7 @@
 ﻿using CameraControl;
 using System.ComponentModel;
 using System.IO;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace p36_photo_table
@@ -39,18 +40,22 @@ namespace p36_photo_table
         {
             this.arduinoController.Home();
 
-            for (int i = 0; i < 2; i += 2)
+            for (int i = 0; i < 4; i += 2)
             {
                 if (backgroundWorker.CancellationPending)
                 {
                     return;
                 }
 
-                this.arduinoController.MoveMotors(-1000, 0, 1000, 0);
+                this.arduinoController.MoveMotors(-5000, 1000, 0, 440);
+
+                Thread.Sleep(1000);
 
                 this.cameraController.TakePicture(i, i);
 
-                this.arduinoController.MoveMotors(1000, 0, -1000, 0);
+                this.arduinoController.MoveMotors(5000, -1000, 0, -440);
+
+                Thread.Sleep(1000);
 
                 this.cameraController.TakePicture(i + 1, i + 1);
             }
@@ -59,6 +64,7 @@ namespace p36_photo_table
         internal void CloseSession()
         {
             this.cameraController.CloseSession();
+            this.arduinoController.CloseSession();
         }
     }
 }

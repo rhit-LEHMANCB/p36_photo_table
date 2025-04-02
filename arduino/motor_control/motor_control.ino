@@ -12,7 +12,7 @@ int tableStepper[] = {tableStepPin, tableDirPin, tableEnPin, tableStepperDelay};
 const int horizDirPin = 5; 
 const int horizStepPin = 6; 
 const int horizEnPin = 7;
-const int horizStepperDelay = 2000;
+const int horizStepperDelay = 750;
 int horizStepper[] = {horizStepPin, horizDirPin, horizEnPin, horizStepperDelay}; 
 
 const int verticalDirPin = 8; 
@@ -24,7 +24,7 @@ int verticalStepper[] = {verticalStepPin, verticalDirPin, verticalEnPin, vertica
 const int cameraDirPin = 11; 
 const int cameraStepPin = 12; 
 const int cameraEnPin = 13;
-const int cameraStepperDelay = 2000;
+const int cameraStepperDelay = 1250;
 int cameraStepper[] = {cameraStepPin, cameraDirPin, cameraEnPin, cameraStepperDelay};  
 
 
@@ -34,18 +34,22 @@ void setup() {
   pinMode(tableStepPin, OUTPUT);
   pinMode(tableDirPin, OUTPUT);
   pinMode(tableEnPin, OUTPUT);
+  digitalWrite(tableEnPin,LOW);
 
   pinMode(horizStepPin, OUTPUT);
   pinMode(horizDirPin, OUTPUT);
   pinMode(horizEnPin, OUTPUT);
+  digitalWrite(horizEnPin,LOW);
 
   pinMode(verticalStepPin, OUTPUT);
   pinMode(verticalDirPin, OUTPUT);
   pinMode(verticalEnPin, OUTPUT);
+  digitalWrite(verticalEnPin,LOW);
 
   pinMode(cameraStepPin, OUTPUT);
   pinMode(cameraDirPin, OUTPUT);
   pinMode(cameraEnPin, OUTPUT);
+  digitalWrite(cameraEnPin,LOW);
 
   Serial.begin(9600);
 }
@@ -80,7 +84,6 @@ void handleMotorCommand(String input) {
 
 void moveMotor(int stepper[], int steps) {
   int absSteps = abs(steps);
-  digitalWrite(stepper[enPinIndex], LOW);
   if (steps < 0) {
     // Counterclockwise
     digitalWrite(stepper[dirPinIndex],LOW);
@@ -94,7 +97,6 @@ void moveMotor(int stepper[], int steps) {
     digitalWrite(stepper[stepPinIndex],LOW); 
     delayMicroseconds(stepper[delayIndex]); 
   }
-  digitalWrite(stepper[enPinIndex], HIGH);
 }
 
 void homeMotors() {
