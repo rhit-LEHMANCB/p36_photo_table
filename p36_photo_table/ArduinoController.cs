@@ -16,7 +16,10 @@ namespace p36_photo_table
         {
             string portName = AutodetectArduinoPort();
             Console.WriteLine("Arduino found on port: " + portName);
-            // TODO: catch the exception if the port isnt found
+            if (portName == null)
+            {
+                throw new ArduinoNotFoundException();
+            }
             serialPort = new SerialPort(portName, 9600);
             serialPort.Open();
         }

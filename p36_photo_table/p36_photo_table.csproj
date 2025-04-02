@@ -49,9 +49,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArduinoNotFoundException.cs" />
     <Compile Include="CameraController.cs" />
     <Compile Include="CameraEvent.cs" />
     <Compile Include="CameraModel.cs" />
+    <Compile Include="CameraNotFoundException.cs" />
     <Compile Include="CapturedItem.cs" />
     <Compile Include="ArduinoController.cs" />
     <Compile Include="EDSDK.cs" />

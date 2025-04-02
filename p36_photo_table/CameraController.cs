@@ -13,16 +13,20 @@ namespace CameraControl
         private CameraModel cameraModel;
         private string fileLocation;
         private string filePrefix;
+        private int currentHorizontalAngle;
+        private int currentVerticalAngle;
         private EDSDK.EdsObjectEventHandler objectEventHandler;
 
         public CameraController(string fileLocation, string filePrefix)
         {
             this.fileLocation = fileLocation;
             this.filePrefix = filePrefix;
+            this.currentVerticalAngle = 0;
+            this.currentHorizontalAngle = 0;
             this.objectEventHandler = new EDSDK.EdsObjectEventHandler(HandleObjectEvent);
         }
 
-        public bool InitializeCamera()
+        public void InitializeCamera()
         {
             uint err = EDSDKLib.EDSDK.EDS_ERR_OK;
 
@@ -100,14 +104,17 @@ namespace CameraControl
 
             if (err != EDSDKLib.EDSDK.EDS_ERR_OK)
             {
-                return false;
+                throw new p36_photo_table.CameraNotFoundException();
             }
-
-            return true;
         }
 
-        public void TakePicture()
+        public void TakePicture(int currentHorizontalAngle, int currentVerticalAngle)
         {
+            this.currentHorizontalAngle = currentHorizontalAngle;
+            this.currentVerticalAngle = currentVerticalAngle;
+
+            Console.WriteLine($"Taking picture at {currentHorizontalAngle}, {currentVerticalAngle}");
+
             EDSDK.EdsSendCommand(cameraModel.Camera, EDSDK.CameraCommand_TakePicture, 0);
         }
 
@@ -143,7 +150,7 @@ namespace CameraControl
         {
             using (Image image = Image.FromStream(new MemoryStream(item.Image)))
             {
-                image.Save($"{fileLocation}/{filePrefix}_15.png", ImageFormat.Png);
+                image.Save($"{fileLocation}/{filePrefix}_{currentHorizontalAngle}_{currentVerticalAngle}.png", ImageFormat.Png);
             }
         }
 

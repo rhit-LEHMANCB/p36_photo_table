@@ -18,13 +18,26 @@ namespace p36_photo_table
         public InProgressPage(int horizontalIncrementValue, int verticalIncrementValue, float partHeight, float partLength, float partWidth, string fileLocation, string filePrefix)
         {
             InitializeComponent();
-            this.controller = new TableController(horizontalIncrementValue, verticalIncrementValue, partHeight, partLength, partWidth, fileLocation, filePrefix);
+            try
+            {
+                this.controller = new TableController(horizontalIncrementValue, verticalIncrementValue, partHeight, partLength, partWidth, fileLocation, filePrefix);
+            }
+            catch (CameraNotFoundException)
+            {
+                MessageBox.Show("No camera found. Please make sure it is plugged in.");
+                this.Close();
+            }
+            catch (ArduinoNotFoundException)
+            {
+                MessageBox.Show("No arduino found. Please make sure it is plugged in.");
+                this.Close();
+            }
             // TODO: setup status labels with inital positions
         }
 
         private void InProgressPage_Shown(object sender, EventArgs e)
         {
-            this.controller.Start(statusBar, statusNumberLabel, statusLabel);
+            tableWorker.RunWorkerAsync();
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
@@ -32,6 +45,43 @@ namespace p36_photo_table
             this.controller.CloseSession();
 
             base.OnFormClosing(e);
+        }
+
+        private void tableWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            BackgroundWorker bw = sender as BackgroundWorker;
+
+            this.controller.Start(bw, statusBar, statusNumberLabel, statusLabel);
+
+            if (bw.CancellationPending)
+            {
+                e.Cancel = true;
+            }
+        }
+
+        private void tableWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (e.Cancelled)
+            {
+                MessageBox.Show("Operation successfully cancelled");
+                this.Close();
+            }
+            else if (e.Error != null)
+            {
+                MessageBox.Show("An error occured during operation");
+                this.Close();
+            }
+            else
+            {
+                // close window and tell user it's done
+                MessageBox.Show("Operation complete");
+                this.Close();
+            }
+        }
+
+        private void stopButton_Click(object sender, EventArgs e)
+        {
+            tableWorker.CancelAsync();
         }
     }
 }

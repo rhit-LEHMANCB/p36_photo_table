@@ -1,4 +1,6 @@
 ﻿using CameraControl;
+using System.ComponentModel;
+using System.IO;
 using System.Windows.Forms;
 
 namespace p36_photo_table
@@ -16,8 +18,8 @@ namespace p36_photo_table
 
         private float currentCameraPos; // degrees
         private float currentTablePos; // degrees
-        private float currentVerticalPos; // cm
-        private float currentHorizontalPos; // cm
+        private float currentVerticalPos; // degrees
+        private float currentHorizontalPos; // degrees
 
         public TableController(int horizontalIncrementValue, int verticalIncrementValue, float partHeight, float partLength, float partWidth, string fileLocation, string filePrefix)
         {
@@ -27,16 +29,31 @@ namespace p36_photo_table
             this.partLength = partLength;
             this.partWidth = partWidth;
             this.cameraController = new CameraController(fileLocation, filePrefix);
+
             this.arduinoController = new ArduinoController();
+
+            this.cameraController.InitializeCamera();
         }
 
-        public void Start(ProgressBar statusBar, Label statusNumberLabel, Label statusLabel)
+        public void Start(BackgroundWorker backgroundWorker, ProgressBar statusBar, Label statusNumberLabel, Label statusLabel)
         {
             this.arduinoController.Home();
-            
-            this.arduinoController.MoveMotors(-1000, 0, 1000, 0);
 
-            //this.cameraController.TakePicture();
+            for (int i = 0; i < 2; i += 2)
+            {
+                if (backgroundWorker.CancellationPending)
+                {
+                    return;
+                }
+
+                this.arduinoController.MoveMotors(-1000, 0, 1000, 0);
+
+                this.cameraController.TakePicture(i, i);
+
+                this.arduinoController.MoveMotors(1000, 0, -1000, 0);
+
+                this.cameraController.TakePicture(i + 1, i + 1);
+            }
         }
 
         internal void CloseSession()

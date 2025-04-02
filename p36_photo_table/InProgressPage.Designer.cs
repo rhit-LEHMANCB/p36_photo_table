@@ -35,6 +35,7 @@
             this.statusStaticLabel = new System.Windows.Forms.Label();
             this.statusLabel = new System.Windows.Forms.Label();
             this.statusNumberLabel = new System.Windows.Forms.Label();
+            this.tableWorker = new System.ComponentModel.BackgroundWorker();
             this.SuspendLayout();
             // 
             // inProgressLabel
@@ -67,6 +68,7 @@
             this.stopButton.TabIndex = 20;
             this.stopButton.Text = "Stop";
             this.stopButton.UseVisualStyleBackColor = false;
+            this.stopButton.Click += new System.EventHandler(this.stopButton_Click);
             // 
             // statusStaticLabel
             // 
@@ -101,6 +103,12 @@
             this.statusNumberLabel.TabIndex = 23;
             this.statusNumberLabel.Text = "Picture 1/36";
             // 
+            // tableWorker
+            // 
+            this.tableWorker.WorkerSupportsCancellation = true;
+            this.tableWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.tableWorker_DoWork);
+            this.tableWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.tableWorker_RunWorkerCompleted);
+            // 
             // InProgressPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -129,5 +137,6 @@
         private System.Windows.Forms.Label statusStaticLabel;
         private System.Windows.Forms.Label statusLabel;
         private System.Windows.Forms.Label statusNumberLabel;
+        private System.ComponentModel.BackgroundWorker tableWorker;
     }
 }
