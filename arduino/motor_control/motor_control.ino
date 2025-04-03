@@ -27,10 +27,7 @@ const int cameraEnPin = 13;
 const int cameraStepperDelay = 1250;
 int cameraStepper[] = {cameraStepPin, cameraDirPin, cameraEnPin, cameraStepperDelay};  
 
-
-
 void setup() {
-  // Setup vertical stepper
   pinMode(tableStepPin, OUTPUT);
   pinMode(tableDirPin, OUTPUT);
   pinMode(tableEnPin, OUTPUT);
@@ -74,12 +71,120 @@ void handleMotorCommand(String input) {
   String horizMotorString = getValue(input, ',', 1);
   String tableMotorString = getValue(input, ',', 2);
   String cameraMotorString = getValue(input, ',', 3);
-  moveMotor(verticalStepper, verticalMotorString.toInt());
-  moveMotor(horizStepper, horizMotorString.toInt());
-  moveMotor(tableStepper, tableMotorString.toInt()); // 1000 full rotation
-  moveMotor(cameraStepper, cameraMotorString.toInt());
+  moveMotors(verticalMotorString.toInt(), horizMotorString.toInt(), tableMotorString.toInt(), cameraMotorString.toInt());
+  // moveMotor(verticalStepper, verticalMotorString.toInt());
+  // moveMotor(horizStepper, horizMotorString.toInt());
+  // moveMotor(tableStepper, tableMotorString.toInt());
+  // moveMotor(cameraStepper, cameraMotorString.toInt());
   
   Serial.println("Motors moved -> Vertical: " + verticalMotorString + " Arm: " + horizMotorString + " Table: " + tableMotorString + " Camera: " + cameraMotorString);
+}
+
+void moveMotors(int verticalSteps, int horizSteps, int tableSteps, int cameraSteps) {
+  int absVerticalSteps = abs(verticalSteps);
+  int absHorizSteps = abs(horizSteps);
+  int absTableSteps = abs(tableSteps);
+  int absCameraSteps = abs(cameraSteps);
+
+  // setup directions
+  digitalWrite(verticalStepper[dirPinIndex], verticalSteps < 0 ? LOW : HIGH);
+  digitalWrite(horizStepper[dirPinIndex], horizSteps < 0 ? LOW : HIGH);
+  digitalWrite(tableStepper[dirPinIndex], tableSteps < 0 ? LOW : HIGH);
+  digitalWrite(cameraStepper[dirPinIndex], cameraSteps < 0 ? LOW : HIGH);
+
+  int currentVerticalSteps = 0;
+  int currentHorizSteps = 0;
+  int currentTableSteps = 0;
+  int currentCameraSteps = 0;
+
+
+  unsigned long microSeconds = micros();
+  unsigned long prevMicrosVertical = micros();
+  unsigned long prevMicrosHoriz = micros();
+  unsigned long prevMicrosTable = micros();
+  unsigned long prevMicrosCamera = micros();
+
+  bool verticalSteppedHigh = false;
+  bool horizSteppedHigh = false;
+  bool tableSteppedHigh = false;
+  bool cameraSteppedHigh = false;
+
+  while (currentVerticalSteps < absVerticalSteps || currentHorizSteps < absHorizSteps || currentTableSteps < absTableSteps || currentCameraSteps < absCameraSteps) {
+    microSeconds = micros();
+
+    // Serial.println("Micros" + String(microSeconds) + ", " + String(prevMicrosVertical) + ", " + String(prevMicrosHoriz) + ", " + String(prevMicrosTable) + ", " + String(prevMicrosCamera));
+
+    // Vertical Stepper
+    if (currentVerticalSteps < absVerticalSteps) {
+      if (!verticalSteppedHigh && microSeconds - prevMicrosVertical >= verticalStepper[delayIndex]) {
+        // Serial.println("pulse vertical high");
+        verticalSteppedHigh = true;
+        prevMicrosVertical = micros();
+        digitalWrite(verticalStepper[stepPinIndex], HIGH);
+      }
+      else if (microSeconds - prevMicrosVertical >= verticalStepper[delayIndex]) {
+        // Serial.println("pulse vertical low: " + String(currentVerticalSteps));
+        verticalSteppedHigh = false;
+        prevMicrosVertical = micros();
+        digitalWrite(verticalStepper[stepPinIndex], LOW);
+        currentVerticalSteps++;
+      }
+    }
+
+    // Horizontal Stepper
+    if (currentHorizSteps < absHorizSteps) {
+      if (!horizSteppedHigh && microSeconds - prevMicrosHoriz >= horizStepper[delayIndex]) {
+        horizSteppedHigh = true;
+        prevMicrosHoriz = microSeconds;
+        digitalWrite(horizStepper[stepPinIndex], HIGH);
+      }
+      else if (microSeconds - prevMicrosHoriz >= horizStepper[delayIndex]) {
+        horizSteppedHigh = false;
+        prevMicrosHoriz = microSeconds;
+        digitalWrite(horizStepper[stepPinIndex], LOW);
+        currentHorizSteps++;
+      }
+    }
+
+    // Table Stepper
+    if (currentTableSteps < absTableSteps) {
+      if (!tableSteppedHigh && microSeconds - prevMicrosTable >= tableStepper[delayIndex]) {
+        tableSteppedHigh = true;
+        prevMicrosTable = microSeconds;
+        digitalWrite(tableStepper[stepPinIndex], HIGH);
+      }
+      else if (microSeconds - prevMicrosTable >= tableStepper[delayIndex]) {
+        tableSteppedHigh = false;
+        prevMicrosTable = microSeconds;
+        digitalWrite(tableStepper[stepPinIndex], LOW);
+        currentTableSteps++;
+      }
+    }
+
+    // Camera Stepper
+    if (currentCameraSteps < absCameraSteps) {
+      if (!cameraSteppedHigh && microSeconds - prevMicrosCamera >= cameraStepper[delayIndex]) {
+        cameraSteppedHigh = true;
+        prevMicrosCamera = microSeconds;
+        digitalWrite(cameraStepper[stepPinIndex], HIGH);
+      }
+      else if (microSeconds - prevMicrosCamera >= cameraStepper[delayIndex]) {
+        cameraSteppedHigh = false;
+        prevMicrosCamera = microSeconds;
+        digitalWrite(cameraStepper[stepPinIndex], LOW);
+        currentCameraSteps++;
+      }
+    }
+
+    delayMicroseconds(25);
+  }
+}
+
+void stepMotor(int stepper[]) {
+  digitalWrite(stepper[stepPinIndex],HIGH); 
+  delayMicroseconds(stepper[delayIndex]); 
+  digitalWrite(stepper[stepPinIndex],LOW); 
+  delayMicroseconds(stepper[delayIndex]); 
 }
 
 void moveMotor(int stepper[], int steps) {
@@ -92,10 +197,7 @@ void moveMotor(int stepper[], int steps) {
     digitalWrite(stepper[dirPinIndex],HIGH);
   }
   for(int x = 0; x < absSteps; x++) {
-    digitalWrite(stepper[stepPinIndex],HIGH); 
-    delayMicroseconds(stepper[delayIndex]); 
-    digitalWrite(stepper[stepPinIndex],LOW); 
-    delayMicroseconds(stepper[delayIndex]); 
+    stepMotor(stepper);
   }
 }
 

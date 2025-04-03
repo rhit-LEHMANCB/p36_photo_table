@@ -5,9 +5,11 @@ using System.Threading;
 using System.Windows.Forms;
 
 namespace p36_photo_table
-{
+{ 
     public class TableController
     {
+        private const bool useCamera = false;
+
         private CameraController cameraController;
         private ArduinoController arduinoController;
 
@@ -29,11 +31,17 @@ namespace p36_photo_table
             this.partHeight = partHeight;
             this.partLength = partLength;
             this.partWidth = partWidth;
-            this.cameraController = new CameraController(fileLocation, filePrefix);
+            if (useCamera)
+            {
+                this.cameraController = new CameraController(fileLocation, filePrefix);
+            }
 
             this.arduinoController = new ArduinoController();
 
-            this.cameraController.InitializeCamera();
+            if (useCamera)
+            {
+                this.cameraController.InitializeCamera();
+            }
         }
 
         public void Start(BackgroundWorker backgroundWorker, ProgressBar statusBar, Label statusNumberLabel, Label statusLabel)
@@ -47,23 +55,32 @@ namespace p36_photo_table
                     return;
                 }
 
-                this.arduinoController.MoveMotors(-5000, 1000, 0, 440);
+                this.arduinoController.MoveMotors(-5000, 500, 0, 500);
 
                 Thread.Sleep(1000);
 
-                this.cameraController.TakePicture(i, i);
+                if (useCamera)
+                {
+                    this.cameraController.TakePicture(i, i);
+                }
 
-                this.arduinoController.MoveMotors(5000, -1000, 0, -440);
+                this.arduinoController.MoveMotors(5000, -500, 0, -500);
 
                 Thread.Sleep(1000);
 
-                this.cameraController.TakePicture(i + 1, i + 1);
+                if (useCamera)
+                {
+                    this.cameraController.TakePicture(i + 1, i + 1);
+                }
             }
         }
 
         internal void CloseSession()
         {
-            this.cameraController.CloseSession();
+            if (useCamera)
+            {
+                this.cameraController.CloseSession();
+            }
             this.arduinoController.CloseSession();
         }
     }
