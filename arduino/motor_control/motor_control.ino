@@ -1,3 +1,5 @@
+#include <ezButton.h>
+
 const int stepPinIndex = 0;
 const int dirPinIndex = 1;
 const int enPinIndex = 2;
@@ -26,6 +28,9 @@ const int cameraStepPin = 12;
 const int cameraEnPin = 13;
 const int cameraStepperDelay = 1250;
 int cameraStepper[] = {cameraStepPin, cameraDirPin, cameraEnPin, cameraStepperDelay};  
+
+const int limitSwitchVerticalPin = 25;
+ezButton limitSwitchVertical(limitSwitchVerticalPin);
 
 void setup() {
   pinMode(tableStepPin, OUTPUT);
@@ -202,7 +207,13 @@ void moveMotor(int stepper[], int steps) {
 }
 
 void homeMotors() {
+  limitSwitchVertical.loop();
 
+  while(limitSwitchVertical.getState() != HIGH) {
+    limitSwitchVertical.loop(); // MUST call the loop() function first
+
+    moveMotor(verticalStepper, -1);
+  }
 }
 
 String getValue(String data, char separator, int index)
