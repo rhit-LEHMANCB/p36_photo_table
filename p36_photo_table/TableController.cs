@@ -59,6 +59,21 @@ namespace p36_photo_table
 
             for (int currentHorizontalAngle = 0; currentHorizontalAngle < 360; currentHorizontalAngle += horizontalIncrementValue)
             {
+                if (backgroundWorker.CancellationPending)
+                {
+                    return;
+                }
+
+                int tableSteps = GetTableStepsFromAngle(horizontalIncrementValue);
+
+                bool succeeded = this.arduinoController.MoveMotors(0, 0, tableSteps, 0);
+                if (!succeeded)
+                {
+                    return;
+                }
+
+                Thread.Sleep(1000);
+
                 for (int currentCameraAngle = 90; currentCameraAngle >= 0; currentCameraAngle -= verticalIncrementValue)
                 {
                     if (backgroundWorker.CancellationPending)
@@ -73,11 +88,14 @@ namespace p36_photo_table
                     currentVerticalSteps += verticalSteps;
                     int horizontalSteps = GetHorizontalStepsFromPosition(horizontalAndVerticalPosition.Item2);
                     currentHorizontalSteps += horizontalSteps;
-                    int tableSteps = GetTableStepsFromAngle(horizontalIncrementValue);
                     int cameraSteps = GetCameraStepsFromAngle(verticalIncrementValue);
                     currentCameraSteps += cameraSteps;
 
-                    this.arduinoController.MoveMotors(verticalSteps, horizontalSteps, tableSteps, cameraSteps);
+                    succeeded = this.arduinoController.MoveMotors(verticalSteps, horizontalSteps, 0, cameraSteps);
+                    if (!succeeded)
+                    {
+                        return;
+                    }
 
                     Thread.Sleep(1000);
 

@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO.Ports;
-using System.Linq;
-using System.Management;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace p36_photo_table
 {
@@ -81,10 +76,17 @@ namespace p36_photo_table
             }
         }
 
-        internal void MoveMotors(int verticalSteps, int horizontalSteps, int tableSteps, int cameraSteps)
+        internal bool MoveMotors(int verticalSteps, int horizontalSteps, int tableSteps, int cameraSteps)
         {
             SendCommand($"{verticalSteps},{horizontalSteps},{tableSteps},{cameraSteps}");
-            Console.WriteLine(WaitForResponse());
+            string response = WaitForResponse();
+            if (response == "cancel")
+            {
+                return false;
+            }
+
+            Console.WriteLine(response);
+            return true;
         }
 
         internal void CloseSession()
