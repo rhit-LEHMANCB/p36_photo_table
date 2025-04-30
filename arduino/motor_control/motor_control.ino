@@ -14,7 +14,7 @@ int tableStepper[] = {tableStepPin, tableDirPin, tableEnPin, tableStepperDelay};
 const int horizDirPin = 5; 
 const int horizStepPin = 6; 
 const int horizEnPin = 7;
-const int horizStepperDelay = 750;
+const int horizStepperDelay = 2500;
 int horizStepper[] = {horizStepPin, horizDirPin, horizEnPin, horizStepperDelay}; 
 
 const int verticalDirPin = 8; 
@@ -76,7 +76,11 @@ void handleMotorCommand(String input) {
   String horizMotorString = getValue(input, ',', 1);
   String tableMotorString = getValue(input, ',', 2);
   String cameraMotorString = getValue(input, ',', 3);
-  moveMotors(verticalMotorString.toInt(), horizMotorString.toInt(), tableMotorString.toInt(), cameraMotorString.toInt());
+  long verticalSteps = verticalMotorString.toInt();
+  long horizSteps = horizMotorString.toInt();
+  long tableSteps = tableMotorString.toInt();
+  long cameraSteps = cameraMotorString.toInt();
+  moveMotors(verticalSteps, horizSteps, tableSteps, cameraSteps);
   // moveMotor(verticalStepper, verticalMotorString.toInt());
   // moveMotor(horizStepper, horizMotorString.toInt());
   // moveMotor(tableStepper, tableMotorString.toInt());
@@ -85,22 +89,22 @@ void handleMotorCommand(String input) {
   Serial.println("Motors moved -> Vertical: " + verticalMotorString + " Arm: " + horizMotorString + " Table: " + tableMotorString + " Camera: " + cameraMotorString);
 }
 
-void moveMotors(int verticalSteps, int horizSteps, int tableSteps, int cameraSteps) {
-  int absVerticalSteps = abs(verticalSteps);
-  int absHorizSteps = abs(horizSteps);
-  int absTableSteps = abs(tableSteps);
-  int absCameraSteps = abs(cameraSteps);
+void moveMotors(long verticalSteps, long horizSteps, long tableSteps, long cameraSteps) {
+  long absVerticalSteps = abs(verticalSteps);
+  long absHorizSteps = abs(horizSteps);
+  long absTableSteps = abs(tableSteps);
+  long absCameraSteps = abs(cameraSteps);
 
   // setup directions
-  digitalWrite(verticalStepper[dirPinIndex], verticalSteps < 0 ? LOW : HIGH);
-  digitalWrite(horizStepper[dirPinIndex], horizSteps < 0 ? LOW : HIGH);
+  digitalWrite(verticalStepper[dirPinIndex], verticalSteps < 0 ? LOW : HIGH); // negative goes up
+  digitalWrite(horizStepper[dirPinIndex], horizSteps < 0 ? LOW : HIGH); // negative extends
   digitalWrite(tableStepper[dirPinIndex], tableSteps < 0 ? LOW : HIGH);
-  digitalWrite(cameraStepper[dirPinIndex], cameraSteps < 0 ? LOW : HIGH);
+  digitalWrite(cameraStepper[dirPinIndex], cameraSteps < 0 ? LOW : HIGH); // negative spins clockwise
 
-  int currentVerticalSteps = 0;
-  int currentHorizSteps = 0;
-  int currentTableSteps = 0;
-  int currentCameraSteps = 0;
+  long currentVerticalSteps = 0;
+  long currentHorizSteps = 0;
+  long currentTableSteps = 0;
+  long currentCameraSteps = 0;
 
 
   unsigned long microSeconds = micros();
