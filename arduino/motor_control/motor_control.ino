@@ -8,13 +8,13 @@ const int delayIndex = 3;
 const int tableDirPin = 2; 
 const int tableStepPin = 3; 
 const int tableEnPin = 4;
-const int tableStepperDelay = 1000;
+const int tableStepperDelay = 500;
 int tableStepper[] = {tableStepPin, tableDirPin, tableEnPin, tableStepperDelay}; 
 
 const int horizDirPin = 5; 
 const int horizStepPin = 6; 
 const int horizEnPin = 7;
-const int horizStepperDelay = 2500;
+const int horizStepperDelay = 750;
 int horizStepper[] = {horizStepPin, horizDirPin, horizEnPin, horizStepperDelay}; 
 
 const int verticalDirPin = 8; 

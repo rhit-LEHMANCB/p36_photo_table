@@ -9,7 +9,7 @@ namespace p36_photo_table
 { 
     public class TableController
     {
-        private const bool useCamera = false;
+        private const bool useCamera = true;
 
         private CameraController cameraController;
         private ArduinoController arduinoController;
@@ -20,7 +20,7 @@ namespace p36_photo_table
         private float partLength;
         private float partWidth;
 
-        private const double TABLE_STEPS_PER_DEGREE = 4000.0d/360.0d;
+        private const double TABLE_STEPS_PER_DEGREE = 32000.0d/360.0d;
         private const double HORIZONTAL_STEPS_PER_CM = 100.2550822d;
         private const int MAX_HORIZONTAL_STEPS = 5220;
         private const double VERTICAL_STEPS_PER_CM = 800.0d/0.3d;
@@ -71,13 +71,13 @@ namespace p36_photo_table
                     return;
                 }
 
-                int tableSteps = GetTableStepsFromAngle(horizontalIncrementValue);
+                int tableSteps = currentHorizontalAngle == 0 ? 0 : GetTableStepsFromAngle(horizontalIncrementValue);
 
-                //bool succeeded = this.arduinoController.MoveMotors(0, 0, tableSteps, 0);
-                //if (!succeeded)
-                //{
-                //    return;
-                //}
+                succeeded = this.arduinoController.MoveMotors(0, 0, tableSteps, 0);
+                if (!succeeded)
+                {
+                    return;
+                }
 
                 Thread.Sleep(2000);
 
@@ -153,6 +153,8 @@ namespace p36_photo_table
 
                 ResetCameraPosition();
             }
+
+            //this.arduinoController.Home();
         }
 
         private int GetTableStepsFromAngle(int horizontalIncrementValue)
