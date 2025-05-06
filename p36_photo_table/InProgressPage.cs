@@ -32,7 +32,6 @@ namespace p36_photo_table
                 MessageBox.Show("No arduino found. Please make sure it is plugged in.");
                 this.Close();
             }
-            // TODO: setup status labels with inital positions
         }
 
         private void InProgressPage_Shown(object sender, EventArgs e)

@@ -1,7 +1,6 @@
 ﻿using CameraControl;
 using System;
 using System.ComponentModel;
-using System.IO;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -19,13 +18,13 @@ namespace p36_photo_table
         private float partHeight;
         private float partLength;
         private float partWidth;
-
         private const double TABLE_STEPS_PER_DEGREE = 32000.0d/360.0d;
         private const double HORIZONTAL_STEPS_PER_CM = 100.2550822d;
         private const int MAX_HORIZONTAL_STEPS = 5220;
         private const double VERTICAL_STEPS_PER_CM = 800.0d/0.3d;
-        private const int MAX_VERTICAL_STEPS = 135467;
+        private const int MAX_VERTICAL_STEPS = 140467;
         private const double CAMERA_STEPS_PER_DEGREE = 1600.0d/360.0d;
+        private const double Y_MIN = 7.62d; // 3 inches
 
         private const float CAMERA_HORIZONTAL_FOV = 70 * (float)(Math.PI / 180); // radians
         private const float CAMERA_VERTICAL_FOV = 50 * (float)(Math.PI / 180); // radians
@@ -56,13 +55,10 @@ namespace p36_photo_table
 
         public void Start(BackgroundWorker backgroundWorker, ProgressBar statusBar, Label statusNumberLabel, Label statusLabel)
         {
-            //this.arduinoController.Home();
+            int pictureNumber = 1;
+            int totalNumPictures = GetTotalNumPictures();
 
-            bool succeeded = this.arduinoController.MoveMotors(0, 0, 0, 400);
-            if (!succeeded)
-            {
-                return;
-            }
+            this.arduinoController.Home();
 
             for (int currentHorizontalAngle = 0; currentHorizontalAngle < 360; currentHorizontalAngle += horizontalIncrementValue)
             {
@@ -72,8 +68,9 @@ namespace p36_photo_table
                 }
 
                 int tableSteps = currentHorizontalAngle == 0 ? 0 : GetTableStepsFromAngle(horizontalIncrementValue);
+                Console.WriteLine($"table steps: {tableSteps}");
 
-                succeeded = this.arduinoController.MoveMotors(0, 0, tableSteps, 0);
+                bool succeeded = this.arduinoController.MoveMotors(0, 0, tableSteps, 0);
                 if (!succeeded)
                 {
                     return;
@@ -88,9 +85,20 @@ namespace p36_photo_table
                         return;
                     }
 
+                    statusLabel.Invoke((MethodInvoker)delegate {
+                        statusLabel.Text = $"Taking picture with horizontal angle {currentHorizontalAngle} and vertical angle {currentCameraAngle}";
+                    });
+                    statusNumberLabel.Invoke((MethodInvoker)delegate {
+                        statusNumberLabel.Text = $"Picture {pictureNumber}/{totalNumPictures}";
+                    });
+                    statusBar.Invoke((MethodInvoker)delegate {
+                        statusBar.Value = (int)((float)pictureNumber / totalNumPictures * 100);
+                    });
+                    pictureNumber++;
+
                     Tuple<double, double> projectedArea = GetProjectedArea(currentHorizontalAngle, currentCameraAngle);
                     Console.WriteLine($"projected: {projectedArea}");
-                    Tuple<double, double> horizontalAndVerticalPosition = GetHorizontalAndVerticalPosition(projectedArea, currentCameraAngle);
+                    Tuple<double, double> horizontalAndVerticalPosition = GetHorizontalAndVerticalPosition(projectedArea, currentHorizontalAngle, currentCameraAngle);
                     Console.WriteLine($"positions: {horizontalAndVerticalPosition}");
 
                     int expectedHorizontalSteps = GetHorizontalStepsFromPosition(horizontalAndVerticalPosition.Item1);
@@ -105,38 +113,51 @@ namespace p36_photo_table
                     int verticalSteps = expectedVerticalSteps - currentVerticalSteps;
                     currentVerticalSteps = expectedVerticalSteps;
 
-                    int cameraSteps = currentCameraAngle == 90 ? 0 : GetCameraStepsFromAngle(verticalIncrementValue);
+                    int cameraSteps;
+                    if (currentCameraAngle == 90)
+                    {
+                        cameraSteps = 400;
+                    }
+                    else
+                    {
+                        cameraSteps = GetCameraStepsFromAngle(verticalIncrementValue);
+                    }
                     currentCameraSteps += cameraSteps;
 
                     Console.WriteLine($"expected: {expectedHorizontalSteps} {expectedVerticalSteps} {cameraSteps}");
                     Console.WriteLine($"increments: {horizontalSteps} {verticalSteps} {cameraSteps}");
 
-                    
+
 
                     if (verticalSteps < 0)
                     {
                         // move vertical first then horizontal
-                        succeeded = this.arduinoController.MoveMotors(verticalSteps, 0, 0, cameraSteps);
+                        succeeded = this.arduinoController.MoveMotors(verticalSteps, 0, 0, 0);
                         if (!succeeded)
                         {
                             return;
                         }
 
-                        //succeeded = this.arduinoController.MoveMotors(0, horizontalSteps, 0, cameraSteps);
-                        //if (!succeeded)
-                        //{
-                        //    return;
-                        //}
+                        succeeded = this.arduinoController.MoveMotors(0, horizontalSteps, 0, cameraSteps);
+                        if (!succeeded)
+                        {
+                            return;
+                        }
                     }
                     else
                     {
                         // move in sync
-                        //bool succeeded = this.arduinoController.MoveMotors(verticalSteps, horizontalSteps, 0, cameraSteps);
-                        //if (!succeeded)
-                        //{
-                        //    return;
-                        //}
-                        succeeded = this.arduinoController.MoveMotors(verticalSteps, 0, 0, cameraSteps);
+                        succeeded = this.arduinoController.MoveMotors(verticalSteps, horizontalSteps, 0, cameraSteps);
+                        if (!succeeded)
+                        {
+                            return;
+                        }
+                    }
+
+                    if (currentCameraAngle == 0)
+                    {
+                        cameraSteps = GetCameraStepsFromMinTheta(horizontalAndVerticalPosition.Item1);
+                        succeeded = this.arduinoController.MoveMotors(0, 0, 0, cameraSteps);
                         if (!succeeded)
                         {
                             return;
@@ -149,12 +170,30 @@ namespace p36_photo_table
                     {
                         this.cameraController.TakePicture(currentHorizontalAngle, currentCameraAngle);
                     }
-                }
 
-                ResetCameraPosition();
+                    if (currentCameraAngle == 0)
+                    {
+                        succeeded = this.arduinoController.MoveMotors(0, 0, 0, -cameraSteps);
+                        if (!succeeded)
+                        {
+                            return;
+                        }
+                    }
+                }
             }
 
-            //this.arduinoController.Home();
+            this.arduinoController.Home();
+        }
+
+        private int GetCameraStepsFromMinTheta(double x)
+        {
+            double yPrime = Y_MIN - (partHeight / 2);
+            if (yPrime < 0)
+            {
+                return 0;
+            }
+            double thetaMinDegrees = Math.Tanh(yPrime / x);
+            return (int)Math.Round(thetaMinDegrees * CAMERA_STEPS_PER_DEGREE);
         }
 
         private int GetTableStepsFromAngle(int horizontalIncrementValue)
@@ -171,7 +210,7 @@ namespace p36_photo_table
             this.arduinoController.MoveMotors(0, 0, 0, cameraSteps);
         }
 
-        private int GetCameraStepsFromAngle(int currentCameraAngle)
+        private int GetCameraStepsFromAngle(double currentCameraAngle)
         {
             return -(int)Math.Round(currentCameraAngle * CAMERA_STEPS_PER_DEGREE);
         }
@@ -195,17 +234,41 @@ namespace p36_photo_table
             return new Tuple<double, double>(projectedWidth, projectedHeight);
         }
 
-        public Tuple<double, double> GetHorizontalAndVerticalPosition(Tuple<double, double> projectedArea, float cameraAngleDegrees)
+        public Tuple<double, double> GetHorizontalAndVerticalPosition(Tuple<double, double> projectedArea, float currentHorizontalAngleDegrees, int cameraAngleDegrees)
         {
             double projectedWidth = projectedArea.Item1;
             double projectedHeight = projectedArea.Item2;
             float cameraAngleRadians = cameraAngleDegrees * (float)(Math.PI / 180);
+
             double horizontalDistance = (projectedWidth / 2) / Math.Tan(CAMERA_HORIZONTAL_FOV / 2);
             double verticalDistance = (projectedHeight / 2) / Math.Tan(CAMERA_VERTICAL_FOV / 2);
+
             double distance = Math.Max(horizontalDistance, verticalDistance);
-            double x = Math.Cos(cameraAngleRadians) * distance;
-            double y = Math.Sin(cameraAngleRadians) * distance;
+            double effectiveDepth = GetEffectiveDepth(currentHorizontalAngleDegrees, cameraAngleDegrees);
+
+            double halfPartWidth = effectiveDepth / 2;
+            Console.WriteLine($"effective depth: {effectiveDepth}");
+
+            double partOffset = cameraAngleDegrees == 90 ? partHeight : halfPartWidth / Math.Cos(cameraAngleRadians);
+            double offsetX = Math.Cos(cameraAngleRadians) * partOffset;
+            double offsetY = Math.Sin(cameraAngleRadians) * partOffset;
+            Console.WriteLine($"offset: {offsetX} {offsetY}");
+
+            double x = Math.Cos(cameraAngleRadians) * distance + offsetX;
+            double y = Math.Sin(cameraAngleRadians) * distance + offsetY;
             return new Tuple<double, double>(x, y);
+        }
+
+        double GetEffectiveDepth(float turntableAngleDegrees, float cameraAngleDegrees)
+        {
+            double turntableAngleRadians = turntableAngleDegrees * (Math.PI / 180);
+            double cameraAngleRadians = cameraAngleDegrees * (Math.PI / 180);
+
+            double dx = partLength * Math.Cos(turntableAngleRadians);
+            double dz = partWidth * Math.Sin(turntableAngleRadians);
+
+            double effectiveDepth = Math.Abs(dx + dz);
+            return effectiveDepth;
         }
 
         internal void CloseSession()
@@ -215,6 +278,11 @@ namespace p36_photo_table
                 this.cameraController.CloseSession();
             }
             this.arduinoController.CloseSession();
+        }
+
+        internal int GetTotalNumPictures()
+        {
+            return (360 / horizontalIncrementValue) * (90 / verticalIncrementValue);
         }
     }
 }

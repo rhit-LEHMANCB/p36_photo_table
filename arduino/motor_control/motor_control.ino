@@ -14,7 +14,7 @@ int tableStepper[] = {tableStepPin, tableDirPin, tableEnPin, tableStepperDelay};
 const int horizDirPin = 5; 
 const int horizStepPin = 6; 
 const int horizEnPin = 7;
-const int horizStepperDelay = 750;
+const int horizStepperDelay = 1900;
 int horizStepper[] = {horizStepPin, horizDirPin, horizEnPin, horizStepperDelay}; 
 
 const int verticalDirPin = 8; 
@@ -29,8 +29,11 @@ const int cameraEnPin = 13;
 const int cameraStepperDelay = 1250;
 int cameraStepper[] = {cameraStepPin, cameraDirPin, cameraEnPin, cameraStepperDelay};  
 
-const int limitSwitchVerticalPin = 25;
+const int limitSwitchVerticalPin = 24;
 ezButton limitSwitchVertical(limitSwitchVerticalPin);
+
+// const int limitSwitchHorizontalPin = 26;
+// ezButton limitSwitchHorizontal(limitSwitchHorizontalPin);
 
 void setup() {
   pinMode(tableStepPin, OUTPUT);
@@ -218,6 +221,14 @@ void homeMotors() {
 
     moveMotor(verticalStepper, -1);
   }
+
+  // limitSwitchHorizontal.loop();
+
+  // while(limitSwitchHorizontal.getState() != HIGH) {
+  //   limitSwitchHorizontal.loop(); // MUST call the loop() function first
+
+  //   moveMotor(horizStepper, -1);
+  // }
 }
 
 String getValue(String data, char separator, int index)

@@ -88,9 +88,8 @@
             this.statusLabel.Location = new System.Drawing.Point(318, 363);
             this.statusLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.statusLabel.Name = "statusLabel";
-            this.statusLabel.Size = new System.Drawing.Size(527, 25);
+            this.statusLabel.Size = new System.Drawing.Size(0, 25);
             this.statusLabel.TabIndex = 22;
-            this.statusLabel.Text = "Taking picture with horizontal angle 15 and vertical angle 15";
             // 
             // statusNumberLabel
             // 
@@ -99,9 +98,8 @@
             this.statusNumberLabel.Location = new System.Drawing.Point(318, 405);
             this.statusNumberLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.statusNumberLabel.Name = "statusNumberLabel";
-            this.statusNumberLabel.Size = new System.Drawing.Size(116, 25);
+            this.statusNumberLabel.Size = new System.Drawing.Size(0, 25);
             this.statusNumberLabel.TabIndex = 23;
-            this.statusNumberLabel.Text = "Picture 1/36";
             // 
             // tableWorker
             // 
