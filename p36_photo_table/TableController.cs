@@ -28,6 +28,7 @@ namespace p36_photo_table
 
         private const float CAMERA_HORIZONTAL_FOV = 70 * (float)(Math.PI / 180); // radians
         private const float CAMERA_VERTICAL_FOV = 50 * (float)(Math.PI / 180); // radians
+        private const double DOME_OFFSET = 3.0d;
 
         private int currentVerticalSteps;
         private int currentHorizontalSteps;
@@ -60,7 +61,7 @@ namespace p36_photo_table
 
             this.arduinoController.Home();
 
-            for (int currentHorizontalAngle = 0; currentHorizontalAngle < 360; currentHorizontalAngle += horizontalIncrementValue)
+            for (int currentHorizontalAngle = 0; currentHorizontalAngle < (360 - horizontalIncrementValue); currentHorizontalAngle += horizontalIncrementValue)
             {
                 if (backgroundWorker.CancellationPending)
                 {
@@ -98,7 +99,8 @@ namespace p36_photo_table
 
                     Tuple<double, double> projectedArea = GetProjectedArea(currentHorizontalAngle, currentCameraAngle);
                     Console.WriteLine($"projected: {projectedArea}");
-                    Tuple<double, double> horizontalAndVerticalPosition = GetHorizontalAndVerticalPosition(projectedArea, currentHorizontalAngle, currentCameraAngle);
+                    //Tuple<double, double> horizontalAndVerticalPosition = GetHorizontalAndVerticalPosition(projectedArea, currentHorizontalAngle, currentCameraAngle);
+                    Tuple<double, double> horizontalAndVerticalPosition = GetHorizontalAndVerticalPositionDome(currentHorizontalAngle, currentCameraAngle);
                     Console.WriteLine($"positions: {horizontalAndVerticalPosition}");
 
                     int expectedHorizontalSteps = GetHorizontalStepsFromPosition(horizontalAndVerticalPosition.Item1);
@@ -259,6 +261,37 @@ namespace p36_photo_table
             return new Tuple<double, double>(x, y);
         }
 
+        public Tuple<double, double> GetHorizontalAndVerticalPositionDome(float currentHorizontalAngleDegrees, int cameraAngleDegrees)
+        {
+            float cameraAngleRadians = cameraAngleDegrees * (float)(Math.PI / 180);
+
+            // check which face requires the most distance
+
+            // front
+            double horizontalDistanceFront = (partWidth / 2) / Math.Tan(CAMERA_HORIZONTAL_FOV / 2);
+            double verticalDistanceFront = (partHeight / 2) / Math.Tan(CAMERA_VERTICAL_FOV / 2);
+            double distanceFront = Math.Max(horizontalDistanceFront, verticalDistanceFront) + partLength / 2;
+
+            // side
+            double horizontalDistanceSide = (partLength / 2) / Math.Tan(CAMERA_HORIZONTAL_FOV / 2);
+            double verticalDistanceSide = (partHeight / 2) / Math.Tan(CAMERA_VERTICAL_FOV / 2);
+            double distanceSide = Math.Max(horizontalDistanceSide, verticalDistanceSide) + partWidth / 2;
+
+            // top
+            double horizontalDistanceTop = (partWidth / 2) / Math.Tan(CAMERA_HORIZONTAL_FOV / 2);
+            double verticalDistanceTop = (partLength / 2) / Math.Tan(CAMERA_VERTICAL_FOV / 2);
+            double distanceTop = Math.Max(horizontalDistanceTop, verticalDistanceTop) + partHeight;
+
+            double domeMultiplier = 1.5;
+
+            double distance = Math.Max(distanceFront, Math.Max(distanceSide, distanceTop)) * domeMultiplier;
+            Console.WriteLine($"distances: {distanceFront} {distanceSide} {distanceTop} final: {distance}");
+
+            double x = Math.Cos(cameraAngleRadians) * distance;
+            double y = Math.Sin(cameraAngleRadians) * distance + (partHeight / 2) - Y_MIN;
+            return new Tuple<double, double>(x, y);
+        }
+
         double GetEffectiveDepth(float turntableAngleDegrees, float cameraAngleDegrees)
         {
             double turntableAngleRadians = turntableAngleDegrees * (Math.PI / 180);
@@ -282,7 +315,7 @@ namespace p36_photo_table
 
         internal int GetTotalNumPictures()
         {
-            return (360 / horizontalIncrementValue) * (90 / verticalIncrementValue);
+            return (360 / horizontalIncrementValue) * ((90 / verticalIncrementValue) + 1);
         }
     }
 }

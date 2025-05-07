@@ -88,8 +88,9 @@
             this.statusLabel.Location = new System.Drawing.Point(318, 363);
             this.statusLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.statusLabel.Name = "statusLabel";
-            this.statusLabel.Size = new System.Drawing.Size(0, 25);
+            this.statusLabel.Size = new System.Drawing.Size(94, 25);
             this.statusLabel.TabIndex = 22;
+            this.statusLabel.Text = "Homing...";
             // 
             // statusNumberLabel
             // 
