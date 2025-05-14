@@ -20,7 +20,7 @@ int horizStepper[] = {horizStepPin, horizDirPin, horizEnPin, horizStepperDelay};
 const int verticalDirPin = 8; 
 const int verticalStepPin = 9; 
 const int verticalEnPin = 10;
-const int verticalStepperDelay = 250;
+const int verticalStepperDelay = 150;
 int verticalStepper[] = {verticalStepPin, verticalDirPin, verticalEnPin, verticalStepperDelay};  
 
 const int cameraDirPin = 11; 

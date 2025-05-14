@@ -8,7 +8,7 @@ namespace p36_photo_table
 { 
     public class TableController
     {
-        private const bool useCamera = true;
+        private const bool useCamera = false;
 
         private CameraController cameraController;
         private ArduinoController arduinoController;
@@ -61,7 +61,8 @@ namespace p36_photo_table
 
             this.arduinoController.Home();
 
-            for (int currentHorizontalAngle = 0; currentHorizontalAngle < (360 - horizontalIncrementValue); currentHorizontalAngle += horizontalIncrementValue)
+            bool isMovingDown = true;
+            for (int currentHorizontalAngle = 0; currentHorizontalAngle <= (360 - horizontalIncrementValue); currentHorizontalAngle += horizontalIncrementValue)
             {
                 if (backgroundWorker.CancellationPending)
                 {
@@ -78,113 +79,157 @@ namespace p36_photo_table
                 }
 
                 Thread.Sleep(2000);
-
-                for (int currentCameraAngle = 90; currentCameraAngle >= 0; currentCameraAngle -= verticalIncrementValue)
+                
+                int currentCameraAngle = isMovingDown ? 90 : 0;
+                if (isMovingDown)
                 {
-                    if (backgroundWorker.CancellationPending)
+                    while (currentCameraAngle >= 0)
                     {
-                        return;
-                    }
-
-                    statusLabel.Invoke((MethodInvoker)delegate {
-                        statusLabel.Text = $"Taking picture with horizontal angle {currentHorizontalAngle} and vertical angle {currentCameraAngle}";
-                    });
-                    statusNumberLabel.Invoke((MethodInvoker)delegate {
-                        statusNumberLabel.Text = $"Picture {pictureNumber}/{totalNumPictures}";
-                    });
-                    statusBar.Invoke((MethodInvoker)delegate {
-                        statusBar.Value = (int)((float)pictureNumber / totalNumPictures * 100);
-                    });
-                    pictureNumber++;
-
-                    Tuple<double, double> projectedArea = GetProjectedArea(currentHorizontalAngle, currentCameraAngle);
-                    Console.WriteLine($"projected: {projectedArea}");
-                    //Tuple<double, double> horizontalAndVerticalPosition = GetHorizontalAndVerticalPosition(projectedArea, currentHorizontalAngle, currentCameraAngle);
-                    Tuple<double, double> horizontalAndVerticalPosition = GetHorizontalAndVerticalPositionDome(currentHorizontalAngle, currentCameraAngle);
-                    Console.WriteLine($"positions: {horizontalAndVerticalPosition}");
-
-                    int expectedHorizontalSteps = GetHorizontalStepsFromPosition(horizontalAndVerticalPosition.Item1);
-                    expectedHorizontalSteps = Math.Min(expectedHorizontalSteps, MAX_HORIZONTAL_STEPS);
-                    expectedHorizontalSteps = Math.Max(expectedHorizontalSteps, 0);
-                    int horizontalSteps = expectedHorizontalSteps - currentHorizontalSteps;
-                    currentHorizontalSteps = expectedHorizontalSteps;
-
-                    int expectedVerticalSteps = GetVerticalStepsFromPosition(horizontalAndVerticalPosition.Item2);
-                    expectedVerticalSteps = Math.Min(expectedVerticalSteps, MAX_VERTICAL_STEPS);
-                    expectedVerticalSteps = Math.Max(expectedVerticalSteps, 0);
-                    int verticalSteps = expectedVerticalSteps - currentVerticalSteps;
-                    currentVerticalSteps = expectedVerticalSteps;
-
-                    int cameraSteps;
-                    if (currentCameraAngle == 90)
-                    {
-                        cameraSteps = 400;
-                    }
-                    else
-                    {
-                        cameraSteps = GetCameraStepsFromAngle(verticalIncrementValue);
-                    }
-                    currentCameraSteps += cameraSteps;
-
-                    Console.WriteLine($"expected: {expectedHorizontalSteps} {expectedVerticalSteps} {cameraSteps}");
-                    Console.WriteLine($"increments: {horizontalSteps} {verticalSteps} {cameraSteps}");
-
-
-
-                    if (verticalSteps < 0)
-                    {
-                        // move vertical first then horizontal
-                        succeeded = this.arduinoController.MoveMotors(verticalSteps, 0, 0, 0);
-                        if (!succeeded)
+                        bool shouldStop = moveMotors(backgroundWorker, statusLabel, statusNumberLabel, statusBar, pictureNumber, totalNumPictures, currentHorizontalAngle, currentCameraAngle, isMovingDown);
+                        if (shouldStop)
                         {
                             return;
                         }
-
-                        succeeded = this.arduinoController.MoveMotors(0, horizontalSteps, 0, cameraSteps);
-                        if (!succeeded)
-                        {
-                            return;
-                        }
-                    }
-                    else
-                    {
-                        // move in sync
-                        succeeded = this.arduinoController.MoveMotors(verticalSteps, horizontalSteps, 0, cameraSteps);
-                        if (!succeeded)
-                        {
-                            return;
-                        }
-                    }
-
-                    if (currentCameraAngle == 0)
-                    {
-                        cameraSteps = GetCameraStepsFromMinTheta(horizontalAndVerticalPosition.Item1);
-                        succeeded = this.arduinoController.MoveMotors(0, 0, 0, cameraSteps);
-                        if (!succeeded)
-                        {
-                            return;
-                        }
-                    }
-
-                    Thread.Sleep(2000);
-
-                    if (useCamera)
-                    {
-                        this.cameraController.TakePicture(currentHorizontalAngle, currentCameraAngle);
-                    }
-
-                    if (currentCameraAngle == 0)
-                    {
-                        succeeded = this.arduinoController.MoveMotors(0, 0, 0, -cameraSteps);
-                        if (!succeeded)
-                        {
-                            return;
-                        }
+                        pictureNumber++;
+                        currentCameraAngle -= verticalIncrementValue;
                     }
                 }
+                else
+                {
+                    while (currentCameraAngle <= 90)
+                    {
+                        bool shouldStop = moveMotors(backgroundWorker, statusLabel, statusNumberLabel, statusBar, pictureNumber, totalNumPictures, currentHorizontalAngle, currentCameraAngle, isMovingDown);
+                        if (shouldStop)
+                        {
+                            return;
+                        }
+                        pictureNumber++;
+                        currentCameraAngle += verticalIncrementValue;
+                    }
+                }
+                isMovingDown = !isMovingDown;
             }
 
             this.arduinoController.Home();
+        }
+
+        private bool moveMotors(BackgroundWorker backgroundWorker, Label statusLabel, Label statusNumberLabel, ProgressBar statusBar, int pictureNumber, int totalNumPictures, int currentHorizontalAngle, int currentCameraAngle, bool isMovingDown)
+        {
+            if (backgroundWorker.CancellationPending)
+            {
+                return true;
+            }
+
+            statusLabel.Invoke((MethodInvoker)delegate {
+                statusLabel.Text = $"Taking picture with horizontal angle {currentHorizontalAngle} and vertical angle {currentCameraAngle}";
+            });
+            statusNumberLabel.Invoke((MethodInvoker)delegate {
+                statusNumberLabel.Text = $"Picture {pictureNumber}/{totalNumPictures}";
+            });
+            statusBar.Invoke((MethodInvoker)delegate {
+                statusBar.Value = (int)((float)pictureNumber / totalNumPictures * 100);
+            });
+
+            Tuple<double, double> projectedArea = GetProjectedArea(currentHorizontalAngle, currentCameraAngle);
+            Console.WriteLine($"projected: {projectedArea}");
+            //Tuple<double, double> horizontalAndVerticalPosition = GetHorizontalAndVerticalPosition(projectedArea, currentHorizontalAngle, currentCameraAngle);
+            Tuple<double, double> horizontalAndVerticalPosition = GetHorizontalAndVerticalPositionDome(currentHorizontalAngle, currentCameraAngle);
+            Console.WriteLine($"positions: {horizontalAndVerticalPosition}");
+
+            int expectedHorizontalSteps = GetHorizontalStepsFromPosition(horizontalAndVerticalPosition.Item1);
+            expectedHorizontalSteps = Math.Min(expectedHorizontalSteps, MAX_HORIZONTAL_STEPS);
+            expectedHorizontalSteps = Math.Max(expectedHorizontalSteps, 0);
+            int horizontalSteps = expectedHorizontalSteps - currentHorizontalSteps;
+            currentHorizontalSteps = expectedHorizontalSteps;
+
+            int expectedVerticalSteps = GetVerticalStepsFromPosition(horizontalAndVerticalPosition.Item2);
+            expectedVerticalSteps = Math.Min(expectedVerticalSteps, MAX_VERTICAL_STEPS);
+            expectedVerticalSteps = Math.Max(expectedVerticalSteps, 0);
+            int verticalSteps = expectedVerticalSteps - currentVerticalSteps;
+            currentVerticalSteps = expectedVerticalSteps;
+
+            int cameraSteps; 
+            if (isMovingDown)
+            {
+                if (currentCameraAngle == 90)
+                {
+                    cameraSteps = 0;
+                }
+                else
+                {
+                    cameraSteps = GetCameraStepsFromAngle(verticalIncrementValue);
+                }
+            }
+            else
+            {
+                if (currentCameraAngle == 0)
+                {
+                    cameraSteps = 0;
+                }
+                else
+                {
+                    cameraSteps = -GetCameraStepsFromAngle(verticalIncrementValue);
+                }
+            }
+            currentCameraSteps += cameraSteps;
+
+            Console.WriteLine($"expected: {expectedHorizontalSteps} {expectedVerticalSteps} {cameraSteps}");
+            Console.WriteLine($"increments: {horizontalSteps} {verticalSteps} {cameraSteps}");
+
+
+            bool succeeded;
+            if (!isMovingDown)
+            {
+                // move vertical first then horizontal
+                succeeded = this.arduinoController.MoveMotors(verticalSteps, 0, 0, 0);
+                if (!succeeded)
+                {
+                    return true;
+                }
+
+                succeeded = this.arduinoController.MoveMotors(0, horizontalSteps, 0, cameraSteps);
+                if (!succeeded)
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                // move in sync
+                succeeded = this.arduinoController.MoveMotors(verticalSteps, horizontalSteps, 0, cameraSteps);
+                if (!succeeded)
+                {
+                    return true;
+                }
+            }
+
+            if (currentCameraAngle == 0)
+            {
+                cameraSteps = GetCameraStepsFromMinTheta(horizontalAndVerticalPosition.Item1);
+                succeeded = this.arduinoController.MoveMotors(0, 0, 0, cameraSteps);
+                if (!succeeded)
+                {
+                    return true;
+                }
+            }
+
+            Thread.Sleep(2000);
+
+            if (useCamera)
+            {
+                this.cameraController.TakePicture(currentHorizontalAngle, currentCameraAngle);
+            }
+
+            if (currentCameraAngle == 0)
+            {
+                succeeded = this.arduinoController.MoveMotors(0, 0, 0, -cameraSteps);
+                if (!succeeded)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private int GetCameraStepsFromMinTheta(double x)
@@ -194,7 +239,9 @@ namespace p36_photo_table
             {
                 return 0;
             }
-            double thetaMinDegrees = Math.Tanh(yPrime / x);
+            double thetaMinRadians = Math.Atan(yPrime / x);
+            double thetaMinDegrees = thetaMinRadians * (180 / Math.PI);
+            Console.WriteLine($"theta min: {thetaMinDegrees}");
             return (int)Math.Round(thetaMinDegrees * CAMERA_STEPS_PER_DEGREE);
         }
 
@@ -282,9 +329,7 @@ namespace p36_photo_table
             double verticalDistanceTop = (partLength / 2) / Math.Tan(CAMERA_VERTICAL_FOV / 2);
             double distanceTop = Math.Max(horizontalDistanceTop, verticalDistanceTop) + partHeight;
 
-            double domeMultiplier = 1.5;
-
-            double distance = Math.Max(distanceFront, Math.Max(distanceSide, distanceTop)) * domeMultiplier;
+            double distance = Math.Max(distanceFront, Math.Max(distanceSide, distanceTop)) + DOME_OFFSET;
             Console.WriteLine($"distances: {distanceFront} {distanceSide} {distanceTop} final: {distance}");
 
             double x = Math.Cos(cameraAngleRadians) * distance;
