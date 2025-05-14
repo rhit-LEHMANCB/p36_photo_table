@@ -8,7 +8,7 @@ namespace p36_photo_table
 { 
     public class TableController
     {
-        private const bool useCamera = false;
+        private const bool useCamera = true;
 
         private CameraController cameraController;
         private ArduinoController arduinoController;
@@ -28,19 +28,23 @@ namespace p36_photo_table
 
         private const float CAMERA_HORIZONTAL_FOV = 70 * (float)(Math.PI / 180); // radians
         private const float CAMERA_VERTICAL_FOV = 50 * (float)(Math.PI / 180); // radians
-        private const double DOME_OFFSET = 3.0d;
 
         private int currentVerticalSteps;
         private int currentHorizontalSteps;
         private int currentCameraSteps;
 
-        public TableController(int horizontalIncrementValue, int verticalIncrementValue, float partHeight, float partLength, float partWidth, string fileLocation, string filePrefix)
+        private float domeOffset;
+        private int settleDelayMs;
+
+        public TableController(int horizontalIncrementValue, int verticalIncrementValue, float partHeight, float partLength, float partWidth, string fileLocation, string filePrefix, float domeOffset, int settleDelaySeconds)
         {
             this.horizontalIncrementValue = horizontalIncrementValue;
             this.verticalIncrementValue = verticalIncrementValue;
             this.partHeight = partHeight;
             this.partLength = partLength;
             this.partWidth = partWidth;
+            this.domeOffset = domeOffset;
+            this.settleDelayMs = settleDelaySeconds * 1000;
             if (useCamera)
             {
                 this.cameraController = new CameraController(fileLocation, filePrefix);
@@ -78,7 +82,7 @@ namespace p36_photo_table
                     return;
                 }
 
-                Thread.Sleep(2000);
+                Thread.Sleep(settleDelayMs);
                 
                 int currentCameraAngle = isMovingDown ? 90 : 0;
                 if (isMovingDown)
@@ -213,7 +217,7 @@ namespace p36_photo_table
                 }
             }
 
-            Thread.Sleep(2000);
+            Thread.Sleep(settleDelayMs);
 
             if (useCamera)
             {
@@ -248,15 +252,6 @@ namespace p36_photo_table
         private int GetTableStepsFromAngle(int horizontalIncrementValue)
         {
             return (int)Math.Round(horizontalIncrementValue * TABLE_STEPS_PER_DEGREE);
-        }
-
-        private void ResetCameraPosition()
-        {
-            int cameraSteps = -currentCameraSteps;
-            currentCameraSteps = 0;
-
-            Console.WriteLine($"resetting: {cameraSteps}");
-            this.arduinoController.MoveMotors(0, 0, 0, cameraSteps);
         }
 
         private int GetCameraStepsFromAngle(double currentCameraAngle)
@@ -329,7 +324,7 @@ namespace p36_photo_table
             double verticalDistanceTop = (partLength / 2) / Math.Tan(CAMERA_VERTICAL_FOV / 2);
             double distanceTop = Math.Max(horizontalDistanceTop, verticalDistanceTop) + partHeight;
 
-            double distance = Math.Max(distanceFront, Math.Max(distanceSide, distanceTop)) + DOME_OFFSET;
+            double distance = Math.Max(distanceFront, Math.Max(distanceSide, distanceTop)) + domeOffset;
             Console.WriteLine($"distances: {distanceFront} {distanceSide} {distanceTop} final: {distance}");
 
             double x = Math.Cos(cameraAngleRadians) * distance;

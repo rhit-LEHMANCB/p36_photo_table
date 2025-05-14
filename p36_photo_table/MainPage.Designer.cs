@@ -67,6 +67,15 @@
             this.filePrefixValidationLabel = new System.Windows.Forms.Label();
             this.verticalIncrementImage = new System.Windows.Forms.PictureBox();
             this.horizontalIncrementImage = new System.Windows.Forms.PictureBox();
+            this.unitSelection = new System.Windows.Forms.GroupBox();
+            this.inchesButton = new System.Windows.Forms.RadioButton();
+            this.cmButton = new System.Windows.Forms.RadioButton();
+            this.offsetLabel = new System.Windows.Forms.Label();
+            this.offsetInput = new System.Windows.Forms.TextBox();
+            this.delayLabel = new System.Windows.Forms.Label();
+            this.delayInput = new System.Windows.Forms.TextBox();
+            this.offsetValidationLabel = new System.Windows.Forms.Label();
+            this.delayValidationLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.horizontalIncrement)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.verticalIncrement)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.filePrefixInfo)).BeginInit();
@@ -75,6 +84,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.horizontalIncrementInfo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.verticalIncrementImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.horizontalIncrementImage)).BeginInit();
+            this.unitSelection.SuspendLayout();
             this.SuspendLayout();
             // 
             // horizontalIncrement
@@ -87,7 +97,7 @@
             this.horizontalIncrement.Name = "horizontalIncrement";
             this.horizontalIncrement.Size = new System.Drawing.Size(405, 69);
             this.horizontalIncrement.TabIndex = 2;
-            this.horizontalIncrement.Value = 1;
+            this.horizontalIncrement.Value = 9;
             this.horizontalIncrement.Scroll += new System.EventHandler(this.horizontalIncrement_Scroll);
             // 
             // verticalIncrement
@@ -100,7 +110,7 @@
             this.verticalIncrement.Name = "verticalIncrement";
             this.verticalIncrement.Size = new System.Drawing.Size(405, 69);
             this.verticalIncrement.TabIndex = 3;
-            this.verticalIncrement.Value = 1;
+            this.verticalIncrement.Value = 9;
             this.verticalIncrement.Scroll += new System.EventHandler(this.verticalIncrement_Scroll);
             // 
             // horizontalIncrementLabel
@@ -150,7 +160,7 @@
             this.horizontalIncrementValueBox.Name = "horizontalIncrementValueBox";
             this.horizontalIncrementValueBox.Size = new System.Drawing.Size(100, 30);
             this.horizontalIncrementValueBox.TabIndex = 4;
-            this.horizontalIncrementValueBox.Text = "5";
+            this.horizontalIncrementValueBox.Text = "45";
             this.horizontalIncrementValueBox.TextChanged += new System.EventHandler(this.horizontalIncrementValueBox_TextChanged);
             // 
             // verticalIncrementValueBox
@@ -160,7 +170,7 @@
             this.verticalIncrementValueBox.Name = "verticalIncrementValueBox";
             this.verticalIncrementValueBox.Size = new System.Drawing.Size(100, 30);
             this.verticalIncrementValueBox.TabIndex = 5;
-            this.verticalIncrementValueBox.Text = "5";
+            this.verticalIncrementValueBox.Text = "45";
             this.verticalIncrementValueBox.TextChanged += new System.EventHandler(this.verticalIncrementValueBox_TextChanged);
             // 
             // horizontalValidationLabel
@@ -229,57 +239,57 @@
             // 
             this.parthWidthLabel.AutoSize = true;
             this.parthWidthLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
-            this.parthWidthLabel.Location = new System.Drawing.Point(212, 377);
+            this.parthWidthLabel.Location = new System.Drawing.Point(383, 377);
             this.parthWidthLabel.Name = "parthWidthLabel";
-            this.parthWidthLabel.Size = new System.Drawing.Size(208, 32);
+            this.parthWidthLabel.Size = new System.Drawing.Size(146, 32);
             this.parthWidthLabel.TabIndex = 35;
-            this.parthWidthLabel.Text = "Part Width (cm)";
+            this.parthWidthLabel.Text = "Part Width";
             // 
             // partLengthLabel
             // 
             this.partLengthLabel.AutoSize = true;
             this.partLengthLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
-            this.partLengthLabel.Location = new System.Drawing.Point(554, 377);
+            this.partLengthLabel.Location = new System.Drawing.Point(592, 377);
             this.partLengthLabel.Name = "partLengthLabel";
-            this.partLengthLabel.Size = new System.Drawing.Size(223, 32);
+            this.partLengthLabel.Size = new System.Drawing.Size(161, 32);
             this.partLengthLabel.TabIndex = 36;
-            this.partLengthLabel.Text = "Part Length (cm)";
+            this.partLengthLabel.Text = "Part Length";
             // 
             // partHeightLabel
             // 
             this.partHeightLabel.AutoSize = true;
             this.partHeightLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
-            this.partHeightLabel.Location = new System.Drawing.Point(908, 377);
+            this.partHeightLabel.Location = new System.Drawing.Point(806, 377);
             this.partHeightLabel.Name = "partHeightLabel";
-            this.partHeightLabel.Size = new System.Drawing.Size(218, 32);
+            this.partHeightLabel.Size = new System.Drawing.Size(156, 32);
             this.partHeightLabel.TabIndex = 37;
-            this.partHeightLabel.Text = "Part Height (cm)";
+            this.partHeightLabel.Text = "Part Height";
             // 
             // partWidthInput
             // 
             this.partWidthInput.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.partWidthInput.Location = new System.Drawing.Point(240, 422);
+            this.partWidthInput.Location = new System.Drawing.Point(381, 425);
             this.partWidthInput.Name = "partWidthInput";
             this.partWidthInput.Size = new System.Drawing.Size(148, 30);
-            this.partWidthInput.TabIndex = 6;
+            this.partWidthInput.TabIndex = 9;
             this.partWidthInput.TextChanged += new System.EventHandler(this.partWidthInput_TextChanged);
             // 
             // partLengthInput
             // 
             this.partLengthInput.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.partLengthInput.Location = new System.Drawing.Point(590, 422);
+            this.partLengthInput.Location = new System.Drawing.Point(598, 425);
             this.partLengthInput.Name = "partLengthInput";
             this.partLengthInput.Size = new System.Drawing.Size(148, 30);
-            this.partLengthInput.TabIndex = 7;
+            this.partLengthInput.TabIndex = 10;
             this.partLengthInput.TextChanged += new System.EventHandler(this.partLengthInput_TextChanged);
             // 
             // partHeightInput
             // 
             this.partHeightInput.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.partHeightInput.Location = new System.Drawing.Point(938, 422);
+            this.partHeightInput.Location = new System.Drawing.Point(812, 425);
             this.partHeightInput.Name = "partHeightInput";
             this.partHeightInput.Size = new System.Drawing.Size(148, 30);
-            this.partHeightInput.TabIndex = 8;
+            this.partHeightInput.TabIndex = 11;
             this.partHeightInput.TextChanged += new System.EventHandler(this.partHeightInput_TextChanged);
             // 
             // startButton
@@ -291,7 +301,7 @@
             this.startButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.startButton.Name = "startButton";
             this.startButton.Size = new System.Drawing.Size(220, 95);
-            this.startButton.TabIndex = 11;
+            this.startButton.TabIndex = 16;
             this.startButton.Text = "Start";
             this.startButton.UseVisualStyleBackColor = false;
             this.startButton.Click += new System.EventHandler(this.startButton_Click);
@@ -338,7 +348,7 @@
             // 
             this.partWidthValidationLabel.AutoSize = true;
             this.partWidthValidationLabel.ForeColor = System.Drawing.Color.Red;
-            this.partWidthValidationLabel.Location = new System.Drawing.Point(213, 472);
+            this.partWidthValidationLabel.Location = new System.Drawing.Point(377, 472);
             this.partWidthValidationLabel.Name = "partWidthValidationLabel";
             this.partWidthValidationLabel.Size = new System.Drawing.Size(0, 20);
             this.partWidthValidationLabel.TabIndex = 24;
@@ -347,7 +357,7 @@
             // 
             this.partLengthValidationLabel.AutoSize = true;
             this.partLengthValidationLabel.ForeColor = System.Drawing.Color.Red;
-            this.partLengthValidationLabel.Location = new System.Drawing.Point(555, 472);
+            this.partLengthValidationLabel.Location = new System.Drawing.Point(594, 472);
             this.partLengthValidationLabel.Name = "partLengthValidationLabel";
             this.partLengthValidationLabel.Size = new System.Drawing.Size(0, 20);
             this.partLengthValidationLabel.TabIndex = 25;
@@ -356,7 +366,7 @@
             // 
             this.partHeightValidationLabel.AutoSize = true;
             this.partHeightValidationLabel.ForeColor = System.Drawing.Color.Red;
-            this.partHeightValidationLabel.Location = new System.Drawing.Point(909, 472);
+            this.partHeightValidationLabel.Location = new System.Drawing.Point(808, 472);
             this.partHeightValidationLabel.Name = "partHeightValidationLabel";
             this.partHeightValidationLabel.Size = new System.Drawing.Size(0, 20);
             this.partHeightValidationLabel.TabIndex = 26;
@@ -368,7 +378,7 @@
             this.fileLocationButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.fileLocationButton.Name = "fileLocationButton";
             this.fileLocationButton.Size = new System.Drawing.Size(82, 35);
-            this.fileLocationButton.TabIndex = 10;
+            this.fileLocationButton.TabIndex = 15;
             this.fileLocationButton.Text = "Select";
             this.fileLocationButton.UseVisualStyleBackColor = true;
             this.fileLocationButton.Click += new System.EventHandler(this.fileLocationButton_Click);
@@ -380,7 +390,7 @@
             this.fileLocationLabel.Location = new System.Drawing.Point(144, 668);
             this.fileLocationLabel.Name = "fileLocationLabel";
             this.fileLocationLabel.Size = new System.Drawing.Size(177, 32);
-            this.fileLocationLabel.TabIndex = 39;
+            this.fileLocationLabel.TabIndex = 41;
             this.fileLocationLabel.Text = "File Location";
             // 
             // fileLocationInput
@@ -400,7 +410,7 @@
             this.filePrefixLabel.Location = new System.Drawing.Point(144, 528);
             this.filePrefixLabel.Name = "filePrefixLabel";
             this.filePrefixLabel.Size = new System.Drawing.Size(141, 32);
-            this.filePrefixLabel.TabIndex = 38;
+            this.filePrefixLabel.TabIndex = 39;
             this.filePrefixLabel.Text = "File Prefix";
             // 
             // filePrefixInput
@@ -409,7 +419,7 @@
             this.filePrefixInput.Location = new System.Drawing.Point(106, 572);
             this.filePrefixInput.Name = "filePrefixInput";
             this.filePrefixInput.Size = new System.Drawing.Size(282, 30);
-            this.filePrefixInput.TabIndex = 9;
+            this.filePrefixInput.TabIndex = 13;
             this.filePrefixInput.TextChanged += new System.EventHandler(this.filePrefixInput_TextChanged);
             // 
             // filePrefixValidationLabel
@@ -443,6 +453,99 @@
             this.horizontalIncrementImage.TabIndex = 36;
             this.horizontalIncrementImage.TabStop = false;
             // 
+            // unitSelection
+            // 
+            this.unitSelection.Controls.Add(this.inchesButton);
+            this.unitSelection.Controls.Add(this.cmButton);
+            this.unitSelection.Location = new System.Drawing.Point(106, 377);
+            this.unitSelection.Name = "unitSelection";
+            this.unitSelection.Size = new System.Drawing.Size(224, 78);
+            this.unitSelection.TabIndex = 6;
+            this.unitSelection.TabStop = false;
+            this.unitSelection.Text = "Select Unit";
+            // 
+            // inchesButton
+            // 
+            this.inchesButton.AutoSize = true;
+            this.inchesButton.Location = new System.Drawing.Point(11, 48);
+            this.inchesButton.Name = "inchesButton";
+            this.inchesButton.Size = new System.Drawing.Size(82, 24);
+            this.inchesButton.TabIndex = 8;
+            this.inchesButton.Text = "Inches";
+            this.inchesButton.UseVisualStyleBackColor = true;
+            this.inchesButton.CheckedChanged += new System.EventHandler(this.inchesButton_CheckedChanged);
+            // 
+            // cmButton
+            // 
+            this.cmButton.AutoSize = true;
+            this.cmButton.Checked = true;
+            this.cmButton.Location = new System.Drawing.Point(11, 25);
+            this.cmButton.Name = "cmButton";
+            this.cmButton.Size = new System.Drawing.Size(120, 24);
+            this.cmButton.TabIndex = 7;
+            this.cmButton.TabStop = true;
+            this.cmButton.Text = "Centimeters";
+            this.cmButton.UseVisualStyleBackColor = true;
+            this.cmButton.CheckedChanged += new System.EventHandler(this.cmButton_CheckedChanged);
+            // 
+            // offsetLabel
+            // 
+            this.offsetLabel.AutoSize = true;
+            this.offsetLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
+            this.offsetLabel.Location = new System.Drawing.Point(1008, 377);
+            this.offsetLabel.Name = "offsetLabel";
+            this.offsetLabel.Size = new System.Drawing.Size(315, 32);
+            this.offsetLabel.TabIndex = 38;
+            this.offsetLabel.Text = "Camera Distance Offset";
+            // 
+            // offsetInput
+            // 
+            this.offsetInput.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.offsetInput.Location = new System.Drawing.Point(1014, 425);
+            this.offsetInput.Name = "offsetInput";
+            this.offsetInput.Size = new System.Drawing.Size(306, 30);
+            this.offsetInput.TabIndex = 12;
+            this.offsetInput.Text = "3";
+            this.offsetInput.TextChanged += new System.EventHandler(this.offsetInput_TextChanged);
+            // 
+            // delayLabel
+            // 
+            this.delayLabel.AutoSize = true;
+            this.delayLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
+            this.delayLabel.Location = new System.Drawing.Point(458, 525);
+            this.delayLabel.Name = "delayLabel";
+            this.delayLabel.Size = new System.Drawing.Size(327, 32);
+            this.delayLabel.TabIndex = 40;
+            this.delayLabel.Text = "Settling Delay (Seconds)";
+            // 
+            // delayInput
+            // 
+            this.delayInput.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.delayInput.Location = new System.Drawing.Point(483, 572);
+            this.delayInput.Name = "delayInput";
+            this.delayInput.Size = new System.Drawing.Size(282, 30);
+            this.delayInput.TabIndex = 14;
+            this.delayInput.Text = "2";
+            this.delayInput.TextChanged += new System.EventHandler(this.delayInput_TextChanged);
+            // 
+            // offsetValidationLabel
+            // 
+            this.offsetValidationLabel.AutoSize = true;
+            this.offsetValidationLabel.ForeColor = System.Drawing.Color.Red;
+            this.offsetValidationLabel.Location = new System.Drawing.Point(1010, 472);
+            this.offsetValidationLabel.Name = "offsetValidationLabel";
+            this.offsetValidationLabel.Size = new System.Drawing.Size(0, 20);
+            this.offsetValidationLabel.TabIndex = 42;
+            // 
+            // delayValidationLabel
+            // 
+            this.delayValidationLabel.AutoSize = true;
+            this.delayValidationLabel.ForeColor = System.Drawing.Color.Red;
+            this.delayValidationLabel.Location = new System.Drawing.Point(479, 620);
+            this.delayValidationLabel.Name = "delayValidationLabel";
+            this.delayValidationLabel.Size = new System.Drawing.Size(0, 20);
+            this.delayValidationLabel.TabIndex = 43;
+            // 
             // MainPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -450,6 +553,13 @@
             this.BackColor = System.Drawing.SystemColors.Window;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.ClientSize = new System.Drawing.Size(1425, 871);
+            this.Controls.Add(this.delayValidationLabel);
+            this.Controls.Add(this.offsetValidationLabel);
+            this.Controls.Add(this.delayInput);
+            this.Controls.Add(this.delayLabel);
+            this.Controls.Add(this.offsetInput);
+            this.Controls.Add(this.offsetLabel);
+            this.Controls.Add(this.unitSelection);
             this.Controls.Add(this.verticalIncrementImage);
             this.Controls.Add(this.horizontalIncrementImage);
             this.Controls.Add(this.filePrefixValidationLabel);
@@ -498,6 +608,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.horizontalIncrementInfo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.verticalIncrementImage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.horizontalIncrementImage)).EndInit();
+            this.unitSelection.ResumeLayout(false);
+            this.unitSelection.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -541,6 +653,15 @@
         private System.Windows.Forms.Label filePrefixValidationLabel;
         private System.Windows.Forms.PictureBox horizontalIncrementImage;
         private System.Windows.Forms.PictureBox verticalIncrementImage;
+        private System.Windows.Forms.GroupBox unitSelection;
+        private System.Windows.Forms.RadioButton inchesButton;
+        private System.Windows.Forms.RadioButton cmButton;
+        private System.Windows.Forms.Label offsetLabel;
+        private System.Windows.Forms.TextBox offsetInput;
+        private System.Windows.Forms.Label delayLabel;
+        private System.Windows.Forms.TextBox delayInput;
+        private System.Windows.Forms.Label offsetValidationLabel;
+        private System.Windows.Forms.Label delayValidationLabel;
     }
 }
 

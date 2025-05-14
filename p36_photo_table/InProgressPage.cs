@@ -15,12 +15,12 @@ namespace p36_photo_table
     {
         private TableController controller;
 
-        public InProgressPage(int horizontalIncrementValue, int verticalIncrementValue, float partHeight, float partLength, float partWidth, string fileLocation, string filePrefix)
+        public InProgressPage(int horizontalIncrementValue, int verticalIncrementValue, float partHeight, float partLength, float partWidth, string fileLocation, string filePrefix, float domeOffset, int settleDelaySeconds)
         {
             InitializeComponent();
             try
             {
-                this.controller = new TableController(horizontalIncrementValue, verticalIncrementValue, partHeight, partLength, partWidth, fileLocation, filePrefix);
+                this.controller = new TableController(horizontalIncrementValue, verticalIncrementValue, partHeight, partLength, partWidth, fileLocation, filePrefix, domeOffset, settleDelaySeconds);
             }
             catch (CameraNotFoundException)
             {

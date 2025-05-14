@@ -16,11 +16,21 @@ namespace p36_photo_table
         private const int maxAngleIncrement = 45;
         private const int minAngleIncrement = 5;
         private const int angleMultiple = 5;
-        private const float partMinSizeExclusive = 0.0f;
-        private const float partMaxSizeExclusive = 100.0f;
+        private const float partMinSizeExclusiveCm = 0.0f;
+        private const float partMaxSizeExclusiveCm = 100.0f;
+        private const float partMinSizeExclusiveIn = 0.0f;
+        private const float partMaxSizeExclusiveIn = 39.37f;
+        private const float domeMinSizeExclusiveCm = 0.0f;
+        private const float domeMaxSizeExclusiveCm = 25.0f;
+        private const float domeMinSizeExclusiveIn = 0.0f;
+        private const float domeMaxSizeExclusiveIn = 9.84f;
         private string incrementValidationText = $"Must be a multiple of {angleMultiple} between {minAngleIncrement} and {maxAngleIncrement}.";
-        private string partSizeValidationText = $"Must be a decimal between\n{partMinSizeExclusive} and {partMaxSizeExclusive}, exclusive.";
+        private string partSizeValidationTextCm = $"Must be a decimal between\n{partMinSizeExclusiveCm} and {partMaxSizeExclusiveCm}, exclusive.";
+        private string partSizeValidationTextIn = $"Must be a decimal between\n{partMinSizeExclusiveIn} and {partMaxSizeExclusiveIn}, exclusive.";
         private string filePrefixValidationText = $"Must be a valid prefix. Please use alphabet characters.";
+        private string offsetValidationTextCm = $"Must be a decimal between\n{domeMinSizeExclusiveCm} and {domeMaxSizeExclusiveCm}, exclusive.";
+        private string offsetValidationTextIn = $"Must be a decimal between\n{domeMinSizeExclusiveIn} and {domeMaxSizeExclusiveIn}, exclusive.";
+        private string delayValidationText = $"Must be a positive integer.";
 
 
         private int horizontalIncrementValue;
@@ -30,6 +40,8 @@ namespace p36_photo_table
         private float partWidth;
         private string fileLocation;
         private string filePrefix;
+        private float domeOffset;
+        private int settleDelaySeconds;
 
         private bool isHorizontalIncrementValid;
         private bool isVerticalIncrementValid;
@@ -38,17 +50,23 @@ namespace p36_photo_table
         private bool isPartWidthValid;
         private bool isFileLocationValid;
         private bool isFilePrefixValid;
+        private bool isDelayValid;
+        private bool isDomeOffsetValid;
 
         private bool isSDKLoaded = false;
+
+        private MeasuringUnit unit = MeasuringUnit.CM;
 
         public MainPage()
         {
             InitializeComponent();
-            horizontalIncrementValue = minAngleIncrement;
-            verticalIncrementValue = minAngleIncrement;
+            horizontalIncrementValue = 45;
+            verticalIncrementValue = 45;
             partHeight = 0.0f;
             partWidth = 0.0f;
             partLength = 0.0f;
+            domeOffset = 3.0f;
+            settleDelaySeconds = 2;
             fileLocation = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             folderBrowserDialog.SelectedPath = fileLocation;
             fileLocationInput.Text = $"Current: {fileLocation}";
@@ -60,6 +78,8 @@ namespace p36_photo_table
             isPartWidthValid = false;
             isFileLocationValid = true;
             isFilePrefixValid = false;
+            isDelayValid = true;
+            isDomeOffsetValid = true;
             isSDKLoaded = CameraControl.CameraController.InitializeSDK();
         }
 
@@ -169,10 +189,25 @@ namespace p36_photo_table
 
         private void partWidthInput_TextChanged(object sender, EventArgs e)
         {
+            float min;
+            float max;
+            string validationText;
+            if (unit == MeasuringUnit.CM)
+            {
+                min = partMinSizeExclusiveCm;
+                max = partMaxSizeExclusiveCm;
+                validationText = partSizeValidationTextCm;
+            }
+            else
+            {
+                min = partMinSizeExclusiveIn;
+                max = partMaxSizeExclusiveIn;
+                validationText = partSizeValidationTextIn;
+            }
             float value = 0.0f;
             if (float.TryParse(partWidthInput.Text, out value))
             {
-                if (value > partMinSizeExclusive && value < partMaxSizeExclusive)
+                if (value > min && value < max)
                 {
                     isPartWidthValid = true;
                     partWidthValidationLabel.Text = "";
@@ -181,23 +216,38 @@ namespace p36_photo_table
                 else
                 {
                     isPartWidthValid = false;
-                    partWidthValidationLabel.Text = partSizeValidationText;
+                    partWidthValidationLabel.Text = validationText;
                 }
             }
             else
             {
                 isPartWidthValid = false;
-                partWidthValidationLabel.Text = partSizeValidationText;
+                partWidthValidationLabel.Text = validationText;
             }
             ValidateForm();
         }
 
         private void partLengthInput_TextChanged(object sender, EventArgs e)
         {
+            float min;
+            float max;
+            string validationText;
+            if (unit == MeasuringUnit.CM)
+            {
+                min = partMinSizeExclusiveCm;
+                max = partMaxSizeExclusiveCm;
+                validationText = partSizeValidationTextCm;
+            }
+            else
+            {
+                min = partMinSizeExclusiveIn;
+                max = partMaxSizeExclusiveIn;
+                validationText = partSizeValidationTextIn;
+            }
             float value = 0.0f;
             if (float.TryParse(partLengthInput.Text, out value))
             {
-                if (value > partMinSizeExclusive && value < partMaxSizeExclusive)
+                if (value > min && value < max)
                 {
                     isPartLengthValid = true;
                     partLengthValidationLabel.Text = "";
@@ -206,23 +256,38 @@ namespace p36_photo_table
                 else
                 {
                     isPartLengthValid = false;
-                    partLengthValidationLabel.Text = partSizeValidationText;
+                    partLengthValidationLabel.Text = validationText;
                 }
             }
             else
             {
                 isPartLengthValid = false;
-                partLengthValidationLabel.Text = partSizeValidationText;
+                partLengthValidationLabel.Text = validationText;
             }
             ValidateForm();
         }
 
         private void partHeightInput_TextChanged(object sender, EventArgs e)
         {
+            float min;
+            float max;
+            string validationText;
+            if (unit == MeasuringUnit.CM)
+            {
+                min = partMinSizeExclusiveCm;
+                max = partMaxSizeExclusiveCm;
+                validationText = partSizeValidationTextCm;
+            }
+            else
+            {
+                min = partMinSizeExclusiveIn;
+                max = partMaxSizeExclusiveIn;
+                validationText = partSizeValidationTextIn;
+            }
             float value = 0.0f;
             if (float.TryParse(partHeightInput.Text, out value))
             {
-                if (value > partMinSizeExclusive && value < partMaxSizeExclusive)
+                if (value > min && value < max)
                 {
                     isPartHeightValid = true;
                     partHeightValidationLabel.Text = "";
@@ -231,13 +296,53 @@ namespace p36_photo_table
                 else
                 {
                     isPartHeightValid = false;
-                    partHeightValidationLabel.Text = partSizeValidationText;
+                    partHeightValidationLabel.Text = validationText;
                 }
             }
             else
             {
                 isPartHeightValid = false;
-                partHeightValidationLabel.Text = partSizeValidationText;
+                partHeightValidationLabel.Text = validationText;
+            }
+            ValidateForm();
+        }
+
+        private void offsetInput_TextChanged(object sender, EventArgs e)
+        {
+            float min;
+            float max;
+            string validationText;
+            if (unit == MeasuringUnit.CM)
+            {
+                min = domeMinSizeExclusiveCm;
+                max = domeMaxSizeExclusiveCm;
+                validationText = offsetValidationTextCm;
+            }
+            else
+            {
+                min = domeMinSizeExclusiveIn;
+                max = domeMaxSizeExclusiveIn;
+                validationText = offsetValidationTextIn;
+            }
+            float value = 0.0f;
+            if (float.TryParse(offsetInput.Text, out value))
+            {
+                if (value > min && value < max)
+                {
+                    isDomeOffsetValid = true;
+                    offsetValidationLabel.Text = "";
+                    this.domeOffset = value;
+                }
+                else
+                {
+                    isDomeOffsetValid = false;
+                    offsetValidationLabel.Text = validationText;
+                }
+            }
+            else
+            {
+                isDomeOffsetValid = false;
+                offsetValidationLabel.Text = validationText;
             }
             ValidateForm();
         }
@@ -268,7 +373,9 @@ namespace p36_photo_table
                 isPartLengthValid &&
                 isPartWidthValid &&
                 isFileLocationValid &&
-                isFilePrefixValid)
+                isFilePrefixValid &&
+                isDomeOffsetValid &&
+                isDelayValid)
             {
                 startButton.BackColor = Color.LimeGreen;
                 startButton.Enabled = true;
@@ -311,7 +418,18 @@ namespace p36_photo_table
 
         private void startButton_Click(object sender, EventArgs e)
         {
-            InProgressPage popup = new InProgressPage(horizontalIncrementValue, verticalIncrementValue, partHeight, partLength, partWidth, fileLocation, filePrefix);
+            float width = partWidth;
+            float length = partLength;
+            float height = partHeight;
+            float offset = this.domeOffset;
+            if (unit == MeasuringUnit.INCHES)
+            {
+                width = width * 2.54f;
+                length = length * 2.54f;
+                height = height * 2.54f;
+                offset = offset * 2.54f;
+            }
+            InProgressPage popup = new InProgressPage(horizontalIncrementValue, verticalIncrementValue, height, length, width, fileLocation, filePrefix, offset, settleDelaySeconds);
 
             if (isSDKLoaded)
             {
@@ -325,5 +443,60 @@ namespace p36_photo_table
                 MessageBox.Show("SDK not loaded.");
             }
         }
+
+        private void delayInput_TextChanged(object sender, EventArgs e)
+        {
+            int value = 0;
+            if (int.TryParse(delayInput.Text, out value))
+            {
+                if (value >= 0)
+                {
+                    isDelayValid = true;
+                    delayValidationLabel.Text = "";
+                    this.settleDelaySeconds = value;
+                }
+                else
+                {
+                    isDelayValid = false;
+                    delayValidationLabel.Text = delayValidationText;
+                }
+            }
+            else
+            {
+                isDelayValid = false;
+                delayValidationLabel.Text = delayValidationText;
+            }
+            ValidateForm();
+        }
+
+        private void cmButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cmButton.Checked && unit == MeasuringUnit.INCHES)
+            {
+                unit = MeasuringUnit.CM;
+                partWidthInput.Text = (partWidth * 2.54).ToString("0.##");
+                partLengthInput.Text = (partLength * 2.54).ToString("0.##");
+                partHeightInput.Text = (partHeight * 2.54).ToString("0.##");
+                offsetInput.Text = (domeOffset * 2.54).ToString("0.##");
+            }
+        }
+
+        private void inchesButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if (inchesButton.Checked && unit == MeasuringUnit.CM)
+            {
+                unit = MeasuringUnit.INCHES;
+                partWidthInput.Text = (partWidth / 2.54f).ToString("0.##");
+                partLengthInput.Text = (partLength / 2.54f).ToString("0.##");
+                partHeightInput.Text = (partHeight / 2.54f).ToString("0.##");
+                offsetInput.Text = (domeOffset / 2.54f).ToString("0.##");
+            }
+        }
+    }
+
+    internal enum MeasuringUnit
+    {
+        CM,
+        INCHES
     }
 }
