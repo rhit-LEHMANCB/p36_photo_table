@@ -492,6 +492,14 @@ namespace p36_photo_table
                 offsetInput.Text = (domeOffset / 2.54f).ToString("0.##");
             }
         }
+
+        private void homeButton_Click(object sender, EventArgs e)
+        {
+            ArduinoController controller = new ArduinoController();
+            controller.Home();
+            controller.CloseSession();
+            MessageBox.Show("Homing complete");
+        }
     }
 
     internal enum MeasuringUnit

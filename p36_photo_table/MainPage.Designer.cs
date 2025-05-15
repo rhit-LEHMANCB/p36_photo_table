@@ -76,6 +76,7 @@
             this.delayInput = new System.Windows.Forms.TextBox();
             this.offsetValidationLabel = new System.Windows.Forms.Label();
             this.delayValidationLabel = new System.Windows.Forms.Label();
+            this.homeButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.horizontalIncrement)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.verticalIncrement)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.filePrefixInfo)).BeginInit();
@@ -546,6 +547,18 @@
             this.delayValidationLabel.Size = new System.Drawing.Size(0, 20);
             this.delayValidationLabel.TabIndex = 43;
             // 
+            // homeButton
+            // 
+            this.homeButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.homeButton.Location = new System.Drawing.Point(1080, 89);
+            this.homeButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.homeButton.Name = "homeButton";
+            this.homeButton.Size = new System.Drawing.Size(240, 35);
+            this.homeButton.TabIndex = 44;
+            this.homeButton.Text = "Home All";
+            this.homeButton.UseVisualStyleBackColor = true;
+            this.homeButton.Click += new System.EventHandler(this.homeButton_Click);
+            // 
             // MainPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -553,6 +566,7 @@
             this.BackColor = System.Drawing.SystemColors.Window;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.ClientSize = new System.Drawing.Size(1425, 871);
+            this.Controls.Add(this.homeButton);
             this.Controls.Add(this.delayValidationLabel);
             this.Controls.Add(this.offsetValidationLabel);
             this.Controls.Add(this.delayInput);
@@ -662,6 +676,7 @@
         private System.Windows.Forms.TextBox delayInput;
         private System.Windows.Forms.Label offsetValidationLabel;
         private System.Windows.Forms.Label delayValidationLabel;
+        private System.Windows.Forms.Button homeButton;
     }
 }
 

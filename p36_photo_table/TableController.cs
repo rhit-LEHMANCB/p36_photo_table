@@ -83,8 +83,15 @@ namespace p36_photo_table
                 }
 
                 Thread.Sleep(settleDelayMs);
-                
-                int currentCameraAngle = isMovingDown ? 90 : 0;
+
+                int currentCameraAngle = isMovingDown ? 90 - verticalIncrementValue : 0;
+                int maxVerticalAngle = currentHorizontalAngle == 0 ? 90 : 90 - verticalIncrementValue;
+
+                if (currentHorizontalAngle == 0)
+                {
+                    currentCameraAngle = 90;
+                }
+
                 if (isMovingDown)
                 {
                     while (currentCameraAngle >= 0)
@@ -100,7 +107,7 @@ namespace p36_photo_table
                 }
                 else
                 {
-                    while (currentCameraAngle <= 90)
+                    while (currentCameraAngle <= maxVerticalAngle)
                     {
                         bool shouldStop = moveMotors(backgroundWorker, statusLabel, statusNumberLabel, statusBar, pictureNumber, totalNumPictures, currentHorizontalAngle, currentCameraAngle, isMovingDown);
                         if (shouldStop)
@@ -153,9 +160,10 @@ namespace p36_photo_table
             currentVerticalSteps = expectedVerticalSteps;
 
             int cameraSteps; 
+            int maxVerticalSteps = currentHorizontalAngle == 0 ? 90 : 90 - verticalIncrementValue;
             if (isMovingDown)
             {
-                if (currentCameraAngle == 90)
+                if (currentCameraAngle == maxVerticalSteps)
                 {
                     cameraSteps = 0;
                 }
@@ -215,6 +223,11 @@ namespace p36_photo_table
                 {
                     return true;
                 }
+            }
+
+            if (useCamera && currentHorizontalAngle == 0 && currentCameraAngle == 90)
+            {
+                this.cameraController.TakePicture(currentHorizontalAngle, currentCameraAngle);
             }
 
             Thread.Sleep(settleDelayMs);
