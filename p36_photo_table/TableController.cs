@@ -20,9 +20,9 @@ namespace p36_photo_table
         private float partWidth;
         private const double TABLE_STEPS_PER_DEGREE = 32000.0d/360.0d;
         private const double HORIZONTAL_STEPS_PER_CM = 100.2550822d;
-        private const int MAX_HORIZONTAL_STEPS = 5220;
+        public const int MAX_HORIZONTAL_STEPS = 5220;
         private const double VERTICAL_STEPS_PER_CM = 800.0d/0.3d;
-        private const int MAX_VERTICAL_STEPS = 140467;
+        public const int MAX_VERTICAL_STEPS = 140467;
         private const double CAMERA_STEPS_PER_DEGREE = 1600.0d/360.0d;
         private const double Y_MIN = 7.62d; // 3 inches
 

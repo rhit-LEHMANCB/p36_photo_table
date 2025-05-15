@@ -92,6 +92,6 @@ namespace p36_photo_table
         internal void CloseSession()
         {
             serialPort.Close();
-        }
+        
     }
 }

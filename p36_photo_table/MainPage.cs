@@ -500,6 +500,15 @@ namespace p36_photo_table
             controller.CloseSession();
             MessageBox.Show("Homing complete");
         }
+
+        private void storeButton_Click(object sender, EventArgs e)
+        {
+            ArduinoController controller = new ArduinoController();
+            controller.Home();
+            controller.MoveMotors(TableController.MAX_VERTICAL_STEPS / 2, TableController.MAX_HORIZONTAL_STEPS / 2, 0, 0);
+            controller.CloseSession();
+            MessageBox.Show("Homing complete");
+        }
     }
 
     internal enum MeasuringUnit
