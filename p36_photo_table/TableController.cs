@@ -291,31 +291,6 @@ namespace p36_photo_table
             return new Tuple<double, double>(projectedWidth, projectedHeight);
         }
 
-        public Tuple<double, double> GetHorizontalAndVerticalPosition(Tuple<double, double> projectedArea, float currentHorizontalAngleDegrees, int cameraAngleDegrees)
-        {
-            double projectedWidth = projectedArea.Item1;
-            double projectedHeight = projectedArea.Item2;
-            float cameraAngleRadians = cameraAngleDegrees * (float)(Math.PI / 180);
-
-            double horizontalDistance = (projectedWidth / 2) / Math.Tan(CAMERA_HORIZONTAL_FOV / 2);
-            double verticalDistance = (projectedHeight / 2) / Math.Tan(CAMERA_VERTICAL_FOV / 2);
-
-            double distance = Math.Max(horizontalDistance, verticalDistance);
-            double effectiveDepth = GetEffectiveDepth(currentHorizontalAngleDegrees, cameraAngleDegrees);
-
-            double halfPartWidth = effectiveDepth / 2;
-            Console.WriteLine($"effective depth: {effectiveDepth}");
-
-            double partOffset = cameraAngleDegrees == 90 ? partHeight : halfPartWidth / Math.Cos(cameraAngleRadians);
-            double offsetX = Math.Cos(cameraAngleRadians) * partOffset;
-            double offsetY = Math.Sin(cameraAngleRadians) * partOffset;
-            Console.WriteLine($"offset: {offsetX} {offsetY}");
-
-            double x = Math.Cos(cameraAngleRadians) * distance + offsetX;
-            double y = Math.Sin(cameraAngleRadians) * distance + offsetY;
-            return new Tuple<double, double>(x, y);
-        }
-
         public Tuple<double, double> GetHorizontalAndVerticalPositionDome(float currentHorizontalAngleDegrees, int cameraAngleDegrees)
         {
             float cameraAngleRadians = cameraAngleDegrees * (float)(Math.PI / 180);
@@ -345,18 +320,6 @@ namespace p36_photo_table
             return new Tuple<double, double>(x, y);
         }
 
-        double GetEffectiveDepth(float turntableAngleDegrees, float cameraAngleDegrees)
-        {
-            double turntableAngleRadians = turntableAngleDegrees * (Math.PI / 180);
-            double cameraAngleRadians = cameraAngleDegrees * (Math.PI / 180);
-
-            double dx = partLength * Math.Cos(turntableAngleRadians);
-            double dz = partWidth * Math.Sin(turntableAngleRadians);
-
-            double effectiveDepth = Math.Abs(dx + dz);
-            return effectiveDepth;
-        }
-
         internal void CloseSession()
         {
             if (useCamera)
@@ -368,7 +331,7 @@ namespace p36_photo_table
 
         internal int GetTotalNumPictures()
         {
-            return (360 / horizontalIncrementValue) * ((90 / verticalIncrementValue) + 1);
+            return (360 / horizontalIncrementValue) * (90 / verticalIncrementValue) + 1;
         }
     }
 }
