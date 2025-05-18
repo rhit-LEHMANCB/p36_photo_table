@@ -507,7 +507,7 @@ namespace p36_photo_table
             controller.Home();
             controller.MoveMotors(TableController.MAX_VERTICAL_STEPS / 2, TableController.MAX_HORIZONTAL_STEPS / 2, 0, 0);
             controller.CloseSession();
-            MessageBox.Show("Homing complete");
+            MessageBox.Show("System is stored");
         }
     }
 

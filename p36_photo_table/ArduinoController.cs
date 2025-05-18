@@ -26,6 +26,7 @@ namespace p36_photo_table
             {
                 Console.WriteLine("Checking port: " + portname);
                 var sp = new SerialPort(portname, 9600);
+                sp.WriteTimeout = 1000;
                 try
                 {
                     sp.Open();
@@ -92,6 +93,6 @@ namespace p36_photo_table
         internal void CloseSession()
         {
             serialPort.Close();
-        
+        }
     }
 }

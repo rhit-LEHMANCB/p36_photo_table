@@ -66,6 +66,7 @@ namespace p36_photo_table
             this.arduinoController.Home();
 
             bool isMovingDown = true;
+            bool succeeded;
             for (int currentHorizontalAngle = 0; currentHorizontalAngle <= (360 - horizontalIncrementValue); currentHorizontalAngle += horizontalIncrementValue)
             {
                 if (backgroundWorker.CancellationPending)
@@ -76,7 +77,7 @@ namespace p36_photo_table
                 int tableSteps = currentHorizontalAngle == 0 ? 0 : GetTableStepsFromAngle(horizontalIncrementValue);
                 Console.WriteLine($"table steps: {tableSteps}");
 
-                bool succeeded = this.arduinoController.MoveMotors(0, 0, tableSteps, 0);
+                succeeded = this.arduinoController.MoveMotors(0, 0, tableSteps, 0);
                 if (!succeeded)
                 {
                     return;
@@ -119,6 +120,13 @@ namespace p36_photo_table
                     }
                 }
                 isMovingDown = !isMovingDown;
+            }
+
+            int oneTableIncrementSteps = GetTableStepsFromAngle(horizontalIncrementValue);
+            succeeded = this.arduinoController.MoveMotors(0, 0, oneTableIncrementSteps, 0);
+            if (!succeeded)
+            {
+                return;
             }
 
             this.arduinoController.Home();

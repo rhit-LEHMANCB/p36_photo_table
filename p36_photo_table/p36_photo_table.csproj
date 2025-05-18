@@ -7,7 +7,7 @@
     <ProjectGuid>{BC72171B-1B9F-47F2-8434-767F5C234439}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>p36_photo_table</RootNamespace>
-    <AssemblyName>p36_photo_table</AssemblyName>
+    <AssemblyName>table_control_software</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -47,7 +47,7 @@
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <WarningLevel>5</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
