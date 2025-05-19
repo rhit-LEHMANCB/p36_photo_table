@@ -97,7 +97,7 @@ namespace p36_photo_table
                 {
                     while (currentCameraAngle >= 0)
                     {
-                        bool shouldStop = moveMotors(backgroundWorker, statusLabel, statusNumberLabel, statusBar, pictureNumber, totalNumPictures, currentHorizontalAngle, currentCameraAngle, isMovingDown);
+                        bool shouldStop = MoveMotors(backgroundWorker, statusLabel, statusNumberLabel, statusBar, pictureNumber, totalNumPictures, currentHorizontalAngle, currentCameraAngle, isMovingDown);
                         if (shouldStop)
                         {
                             return;
@@ -110,7 +110,7 @@ namespace p36_photo_table
                 {
                     while (currentCameraAngle <= maxVerticalAngle)
                     {
-                        bool shouldStop = moveMotors(backgroundWorker, statusLabel, statusNumberLabel, statusBar, pictureNumber, totalNumPictures, currentHorizontalAngle, currentCameraAngle, isMovingDown);
+                        bool shouldStop = MoveMotors(backgroundWorker, statusLabel, statusNumberLabel, statusBar, pictureNumber, totalNumPictures, currentHorizontalAngle, currentCameraAngle, isMovingDown);
                         if (shouldStop)
                         {
                             return;
@@ -132,7 +132,7 @@ namespace p36_photo_table
             this.arduinoController.Home();
         }
 
-        private bool moveMotors(BackgroundWorker backgroundWorker, Label statusLabel, Label statusNumberLabel, ProgressBar statusBar, int pictureNumber, int totalNumPictures, int currentHorizontalAngle, int currentCameraAngle, bool isMovingDown)
+        private bool MoveMotors(BackgroundWorker backgroundWorker, Label statusLabel, Label statusNumberLabel, ProgressBar statusBar, int pictureNumber, int totalNumPictures, int currentHorizontalAngle, int currentCameraAngle, bool isMovingDown)
         {
             if (backgroundWorker.CancellationPending)
             {
@@ -149,9 +149,6 @@ namespace p36_photo_table
                 statusBar.Value = (int)((float)pictureNumber / totalNumPictures * 100);
             });
 
-            Tuple<double, double> projectedArea = GetProjectedArea(currentHorizontalAngle, currentCameraAngle);
-            Console.WriteLine($"projected: {projectedArea}");
-            //Tuple<double, double> horizontalAndVerticalPosition = GetHorizontalAndVerticalPosition(projectedArea, currentHorizontalAngle, currentCameraAngle);
             Tuple<double, double> horizontalAndVerticalPosition = GetHorizontalAndVerticalPositionDome(currentHorizontalAngle, currentCameraAngle);
             Console.WriteLine($"positions: {horizontalAndVerticalPosition}");
 
@@ -270,14 +267,14 @@ namespace p36_photo_table
             return (int)Math.Round(thetaMinDegrees * CAMERA_STEPS_PER_DEGREE);
         }
 
-        private int GetTableStepsFromAngle(int horizontalIncrementValue)
+        private int GetTableStepsFromAngle(int angleDegrees)
         {
-            return (int)Math.Round(horizontalIncrementValue * TABLE_STEPS_PER_DEGREE);
+            return (int)Math.Round(angleDegrees * TABLE_STEPS_PER_DEGREE);
         }
 
-        private int GetCameraStepsFromAngle(double currentCameraAngle)
+        private int GetCameraStepsFromAngle(double angleDegrees)
         {
-            return -(int)Math.Round(currentCameraAngle * CAMERA_STEPS_PER_DEGREE);
+            return -(int)Math.Round(angleDegrees * CAMERA_STEPS_PER_DEGREE);
         }
 
         private int GetHorizontalStepsFromPosition(double x)
@@ -288,15 +285,6 @@ namespace p36_photo_table
         private int GetVerticalStepsFromPosition(double y)
         {
             return MAX_VERTICAL_STEPS - (int)Math.Round(y * VERTICAL_STEPS_PER_CM);
-        }
-
-        public Tuple<double, double> GetProjectedArea(float tableAngleDegrees, float cameraAngleDegrees) 
-        {
-            float tableAngleRadians = tableAngleDegrees * (float)(Math.PI / 180);
-            float cameraAngleRadians = cameraAngleDegrees * (float)(Math.PI / 180);
-            double projectedWidth = partLength * Math.Sin(cameraAngleRadians) + partWidth * Math.Cos(cameraAngleRadians);
-            double projectedHeight = (partLength * Math.Cos(cameraAngleRadians) + partWidth * Math.Sin(cameraAngleRadians)) * Math.Sin(tableAngleRadians) + partHeight * Math.Cos(tableAngleRadians);
-            return new Tuple<double, double>(projectedWidth, projectedHeight);
         }
 
         public Tuple<double, double> GetHorizontalAndVerticalPositionDome(float currentHorizontalAngleDegrees, int cameraAngleDegrees)
