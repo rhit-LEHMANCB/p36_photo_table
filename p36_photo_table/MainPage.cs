@@ -532,8 +532,21 @@ namespace p36_photo_table
         {
             try
             {
-                TableController controller = new TableController(horizontalIncrementValue, verticalIncrementValue, partHeight, partLength, partWidth, fileLocation, filePrefix, domeOffset, settleDelaySeconds);
+                float width = partWidth;
+                float length = partLength;
+                float height = partHeight;
+                float offset = this.domeOffset;
+                if (unit == MeasuringUnit.INCHES)
+                {
+                    width = width * 2.54f;
+                    length = length * 2.54f;
+                    height = height * 2.54f;
+                    offset = offset * 2.54f;
+                }
+                TableController controller = new TableController(horizontalIncrementValue, verticalIncrementValue, height, length, width, fileLocation, filePrefix, offset, settleDelaySeconds);
                 controller.TakeTopViewPicture();
+                controller.CloseSession();
+                MessageBox.Show("System is done taking top down picture");
             }
             catch (CameraNotFoundException)
             {
