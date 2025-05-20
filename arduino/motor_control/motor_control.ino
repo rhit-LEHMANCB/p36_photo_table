@@ -5,37 +5,37 @@ const int dirPinIndex = 1;
 const int enPinIndex = 2;
 const int delayIndex = 3;
 
-const int tableDirPin = 2; 
-const int tableStepPin = 3; 
+const int tableDirPin = 50; 
+const int tableStepPin = 51; 
 const int tableEnPin = 4;
 const int tableStepperDelay = 750;
 int tableStepper[] = {tableStepPin, tableDirPin, tableEnPin, tableStepperDelay}; 
 
-const int horizDirPin = 5; 
-const int horizStepPin = 6; 
+const int horizDirPin = 38; 
+const int horizStepPin = 39; 
 const int horizEnPin = 7;
 const int horizStepperDelay = 1900;
 int horizStepper[] = {horizStepPin, horizDirPin, horizEnPin, horizStepperDelay}; 
 
-const int verticalDirPin = 8; 
-const int verticalStepPin = 9; 
+const int verticalDirPin = 42; 
+const int verticalStepPin = 43; 
 const int verticalEnPin = 10;
 const int verticalStepperDelay = 150;
 int verticalStepper[] = {verticalStepPin, verticalDirPin, verticalEnPin, verticalStepperDelay};  
 
-const int cameraDirPin = 11; 
-const int cameraStepPin = 12; 
+const int cameraDirPin = 46; 
+const int cameraStepPin = 47; 
 const int cameraEnPin = 13;
 const int cameraStepperDelay = 2500;
 int cameraStepper[] = {cameraStepPin, cameraDirPin, cameraEnPin, cameraStepperDelay};  
 
-const int limitSwitchVerticalPin = 24;
+const int limitSwitchVerticalPin = 30;
 ezButton limitSwitchVertical(limitSwitchVerticalPin);
 
-const int limitSwitchHorizontalPin = 28;
+const int limitSwitchHorizontalPin = 26;
 ezButton limitSwitchHorizontal(limitSwitchHorizontalPin);
 
-const int limitSwitchCameraPin = 32;
+const int limitSwitchCameraPin = 34;
 ezButton limitSwitchCamera(limitSwitchCameraPin);
 
 void setup() {
