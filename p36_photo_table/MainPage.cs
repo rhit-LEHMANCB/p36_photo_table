@@ -379,11 +379,13 @@ namespace p36_photo_table
             {
                 startButton.BackColor = Color.LimeGreen;
                 startButton.Enabled = true;
+                onePictureButton.Enabled = true;
             }
             else
             {
                 startButton.BackColor = Color.Gray;
                 startButton.Enabled = false;
+                onePictureButton.Enabled = false;
             }
         }
 
@@ -495,19 +497,52 @@ namespace p36_photo_table
 
         private void homeButton_Click(object sender, EventArgs e)
         {
-            ArduinoController controller = new ArduinoController();
-            controller.Home();
-            controller.CloseSession();
-            MessageBox.Show("Homing complete");
+            try
+            {
+                ArduinoController controller = new ArduinoController();
+                controller.Home();
+                controller.CloseSession();
+                MessageBox.Show("Homing complete");
+            }
+            catch (ArduinoNotFoundException)
+            {
+                MessageBox.Show("No arduino found. Please make sure it is plugged in.");
+                this.Close();
+            }
         }
 
         private void storeButton_Click(object sender, EventArgs e)
         {
-            ArduinoController controller = new ArduinoController();
-            controller.Home();
-            controller.MoveMotors(TableController.MAX_VERTICAL_STEPS / 2, TableController.MAX_HORIZONTAL_STEPS / 2, 0, 0);
-            controller.CloseSession();
-            MessageBox.Show("System is stored");
+            try
+            {
+                ArduinoController controller = new ArduinoController();
+                controller.Home();
+                controller.MoveMotors(TableController.MAX_VERTICAL_STEPS / 2, TableController.MAX_HORIZONTAL_STEPS / 2, 0, 0);
+                controller.CloseSession();
+                MessageBox.Show("System is stored");
+            }
+            catch (ArduinoNotFoundException)
+            {
+                MessageBox.Show("No arduino found. Please make sure it is plugged in.");
+                this.Close();
+            }
+        }
+
+        private void onePictureButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                TableController controller = new TableController(horizontalIncrementValue, verticalIncrementValue, partHeight, partLength, partWidth, fileLocation, filePrefix, domeOffset, settleDelaySeconds);
+                controller.TakeTopViewPicture();
+            }
+            catch (CameraNotFoundException)
+            {
+                MessageBox.Show("No camera found. Please make sure it is plugged in.");
+            }
+            catch (ArduinoNotFoundException)
+            {
+                MessageBox.Show("No arduino found. Please make sure it is plugged in.");
+            }
         }
     }
 

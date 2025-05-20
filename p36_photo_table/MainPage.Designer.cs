@@ -78,6 +78,7 @@
             this.delayValidationLabel = new System.Windows.Forms.Label();
             this.homeButton = new System.Windows.Forms.Button();
             this.storeButton = new System.Windows.Forms.Button();
+            this.onePictureButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.horizontalIncrement)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.verticalIncrement)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.filePrefixInfo)).BeginInit();
@@ -572,6 +573,19 @@
             this.storeButton.UseVisualStyleBackColor = true;
             this.storeButton.Click += new System.EventHandler(this.storeButton_Click);
             // 
+            // onePictureButton
+            // 
+            this.onePictureButton.Enabled = false;
+            this.onePictureButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.onePictureButton.Location = new System.Drawing.Point(1080, 48);
+            this.onePictureButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.onePictureButton.Name = "onePictureButton";
+            this.onePictureButton.Size = new System.Drawing.Size(240, 35);
+            this.onePictureButton.TabIndex = 46;
+            this.onePictureButton.Text = "Take One Top View";
+            this.onePictureButton.UseVisualStyleBackColor = true;
+            this.onePictureButton.Click += new System.EventHandler(this.onePictureButton_Click);
+            // 
             // MainPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -579,6 +593,7 @@
             this.BackColor = System.Drawing.SystemColors.Window;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.ClientSize = new System.Drawing.Size(1425, 871);
+            this.Controls.Add(this.onePictureButton);
             this.Controls.Add(this.storeButton);
             this.Controls.Add(this.homeButton);
             this.Controls.Add(this.delayValidationLabel);
@@ -692,6 +707,7 @@
         private System.Windows.Forms.Label delayValidationLabel;
         private System.Windows.Forms.Button homeButton;
         private System.Windows.Forms.Button storeButton;
+        private System.Windows.Forms.Button onePictureButton;
     }
 }
 

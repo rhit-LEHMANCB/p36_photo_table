@@ -134,20 +134,34 @@ namespace p36_photo_table
 
         private bool MoveMotors(BackgroundWorker backgroundWorker, Label statusLabel, Label statusNumberLabel, ProgressBar statusBar, int pictureNumber, int totalNumPictures, int currentHorizontalAngle, int currentCameraAngle, bool isMovingDown)
         {
-            if (backgroundWorker.CancellationPending)
+            if (backgroundWorker != null && backgroundWorker.CancellationPending)
             {
                 return true;
             }
 
-            statusLabel.Invoke((MethodInvoker)delegate {
-                statusLabel.Text = $"Taking picture with horizontal angle {currentHorizontalAngle} and vertical angle {currentCameraAngle}";
-            });
-            statusNumberLabel.Invoke((MethodInvoker)delegate {
-                statusNumberLabel.Text = $"Picture {pictureNumber}/{totalNumPictures}";
-            });
-            statusBar.Invoke((MethodInvoker)delegate {
-                statusBar.Value = (int)((float)pictureNumber / totalNumPictures * 100);
-            });
+            if (statusLabel != null)
+            {
+                statusLabel.Invoke((MethodInvoker)delegate
+                {
+                    statusLabel.Text = $"Taking picture with horizontal angle {currentHorizontalAngle} and vertical angle {currentCameraAngle}";
+                });
+            }
+
+            if (statusNumberLabel != null)
+            {
+                statusNumberLabel.Invoke((MethodInvoker)delegate
+                {
+                    statusNumberLabel.Text = $"Picture {pictureNumber}/{totalNumPictures}";
+                });
+            }
+
+            if (statusBar != null)
+            {
+                statusBar.Invoke((MethodInvoker)delegate
+                {
+                    statusBar.Value = (int)((float)pictureNumber / totalNumPictures * 100);
+                });
+            }
 
             Tuple<double, double> horizontalAndVerticalPosition = GetHorizontalAndVerticalPositionDome(currentHorizontalAngle, currentCameraAngle);
             Console.WriteLine($"positions: {horizontalAndVerticalPosition}");
@@ -252,6 +266,15 @@ namespace p36_photo_table
             }
 
             return false;
+        }
+
+        public void TakeTopViewPicture()
+        {
+            this.arduinoController.Home();
+
+            MoveMotors(null, null, null, null, 0, 0, 0, 90, true);
+
+            this.arduinoController.Home();
         }
 
         private int GetCameraStepsFromMinTheta(double x)
