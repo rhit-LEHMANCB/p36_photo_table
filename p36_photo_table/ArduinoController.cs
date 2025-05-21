@@ -16,26 +16,59 @@ namespace p36_photo_table
                 throw new ArduinoNotFoundException();
             }
             serialPort = new SerialPort(portName, 9600);
+            serialPort.Parity = Parity.None;
+            serialPort.DataBits = 8;
+            serialPort.StopBits = StopBits.One;
+            serialPort.Handshake = Handshake.None;
+            serialPort.DtrEnable = true;
             serialPort.Open();
+
+            Thread.Sleep(1000);
         }
 
         private string AutodetectArduinoPort()
         {
 
+            // Replace the foreach loop in AutodetectArduinoPort with a version that uses timeouts and ReadExisting to avoid hanging
             foreach (string portname in SerialPort.GetPortNames())
             {
                 Console.WriteLine("Checking port: " + portname);
                 var sp = new SerialPort(portname, 9600);
+                sp.Parity = Parity.None;
+                sp.DataBits = 8;
+                sp.StopBits = StopBits.One;
+                sp.Handshake = Handshake.None;
+                sp.DtrEnable = true;
                 sp.WriteTimeout = 1000;
+                sp.ReadTimeout = 1000; // Set a read timeout
                 try
                 {
                     sp.Open();
+                    Thread.Sleep(1000);
+                    sp.DiscardInBuffer();
                     sp.Write("ping");
-                    Thread.Sleep(500);
-                    string received = sp.ReadLine();
+                    string received = string.Empty;
+                    var start = DateTime.Now;
+                    while ((DateTime.Now - start).TotalMilliseconds < 1500)
+                    {
+                        try
+                        {
+                            received = sp.ReadLine();
+                            break;
+                        }
+                        catch (TimeoutException)
+                        {
+                            // Ignore and retry until timeout
+                        }
+                        catch (InvalidOperationException)
+                        {
+                            // Port closed unexpectedly
+                            break;
+                        }
+                    }
                     Console.WriteLine("-" + received + "-");
 
-                    if (received.Contains("pong"))
+                    if (!string.IsNullOrEmpty(received) && received.Contains("pong"))
                     {
                         Console.WriteLine("device connected to: " + portname);
                         return portname;
@@ -47,7 +80,8 @@ namespace p36_photo_table
                 }
                 finally
                 {
-                    sp.Close();
+                    if (sp.IsOpen)
+                        sp.Close();
                 }
             }
 

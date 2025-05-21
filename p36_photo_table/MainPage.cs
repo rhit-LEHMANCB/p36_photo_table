@@ -507,7 +507,6 @@ namespace p36_photo_table
             catch (ArduinoNotFoundException)
             {
                 MessageBox.Show("No arduino found. Please make sure it is plugged in.");
-                this.Close();
             }
         }
 
@@ -524,7 +523,6 @@ namespace p36_photo_table
             catch (ArduinoNotFoundException)
             {
                 MessageBox.Show("No arduino found. Please make sure it is plugged in.");
-                this.Close();
             }
         }
 
